@@ -452,7 +452,11 @@
     </div>
 
     <div class="tree">
-      <div class="node tong"><span class="role">Đời thứ 1 · Thủy Tổ</span>Mà Văn [...]</div>
+      <div class="node tong">
+        <span class="role">Đời thứ 1 · Thủy Tổ</span>
+        <span id="thuyToName">Mà Văn [...]</span>
+        <button class="editor-only" style="margin-left:8px;font-size:.68rem;padding:3px 9px;border-radius:5px;border:1px solid var(--gold);background:none;color:var(--gold-light);cursor:pointer;font-weight:600;" onclick="openEditThuyToModal()">✏️ Sửa</button>
+      </div>
       <div class="connector-v"></div>
     </div>
 
@@ -766,6 +770,32 @@
     }catch(e){ /* chưa có ảnh, dùng nền mặc định */ }
   }
   loadBanner();
+
+  // ---------- tên Thủy Tổ (lưu trong site_settings) ----------
+  async function loadThuyTo(){
+    try{
+      const { data, error } = await sb.from('site_settings').select('value').eq('key','thuy_to_name').maybeSingle();
+      if(!error && data && data.value){
+        document.getElementById('thuyToName').textContent = data.value;
+      }
+    }catch(e){ /* dùng tên mặc định */ }
+  }
+  loadThuyTo();
+
+  function openEditThuyToModal(){
+    if(!requireEditor()) return;
+    const current = document.getElementById('thuyToName').textContent;
+    openPersonModal('Sửa tên Thủy Tổ', 'Đây là người đứng đầu cả dòng họ, ở đời thứ 1.', current, async (name)=>{
+      try{
+        const { error } = await sb.from('site_settings').upsert({ key:'thuy_to_name', value:name, updated_at:new Date().toISOString() });
+        if(error) throw error;
+        document.getElementById('thuyToName').textContent = name;
+        showToast('Đã cập nhật tên Thủy Tổ.');
+      }catch(e){
+        showToast('Lưu thất bại, vui lòng thử lại.');
+      }
+    });
+  }
 
   bannerInput.addEventListener('change', (e)=>{
     if(!requireEditor()) return;
