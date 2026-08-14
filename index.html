@@ -81,6 +81,7 @@
   /* Ẩn toàn bộ nút/khu vực chỉnh sửa cho tới khi Ban liên lạc đăng nhập */
   body:not(.is-editor) .editor-only{display:none !important;}
   body.is-editor #notEditorNotice{display:none !important;}
+  body.is-editor #notEditorTreeNotice{display:none !important;}
 
   /* ---------- hero ---------- */
   .hero{
@@ -141,7 +142,7 @@
   .info-card a.link{font-size:.85rem;font-weight:600;color:var(--lacquer);text-decoration:none;}
 
   /* ---------- gia pha tree ---------- */
-  .tree-note{background:#fff8ea;border-left:4px solid var(--gold);padding:14px 18px;font-size:.85rem;color:var(--ink-soft);margin-bottom:40px;border-radius:0 6px 6px 0;}
+  .tree-note{background:#fff8ea;border-left:4px solid var(--gold);padding:14px 18px;font-size:.85rem;color:var(--ink-soft);margin-bottom:32px;border-radius:0 6px 6px 0;}
   .tree{display:flex;flex-direction:column;align-items:center;}
   .node{
     background:var(--lacquer);color:var(--paper);padding:14px 26px;border-radius:6px;
@@ -150,39 +151,68 @@
   }
   .node.tong{background:var(--ink);border:2px solid var(--gold);}
   .node .role{display:block;font-size:.68rem;font-family:'Be Vietnam Pro',sans-serif;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-light);margin-bottom:2px;}
-  .connector-v{width:2px;height:28px;background:var(--gold);}
-  .branches{display:flex;gap:0;width:100%;justify-content:center;position:relative;margin-top:0;}
-  .branches::before{
-    content:"";position:absolute;top:0;left:10%;right:10%;height:2px;background:var(--gold);
-  }
-  .branch-col{flex:1;max-width:230px;display:flex;flex-direction:column;align-items:center;padding:0 8px;}
-  .branch-col .connector-v{height:28px;}
-  .chi-card{
-    width:100%;background:#fff8ea;border:1px solid var(--paper-deep);border-radius:8px;
-    box-shadow:var(--shadow);overflow:hidden;margin-top:10px;
-    display:flex;flex-direction:column;
-  }
-  .chi-card.chi-truong{border-color:var(--gold);box-shadow:0 10px 30px rgba(184,134,59,.25);}
-  .chi-head{background:var(--jade);color:var(--paper);padding:12px 16px;font-family:'Noto Serif',serif;font-weight:700;text-align:center;}
-  .chi-card.chi-truong .chi-head{background:var(--lacquer);}
-  .chi-head span{display:block;font-size:.66rem;font-family:'Be Vietnam Pro',sans-serif;font-weight:500;letter-spacing:.1em;color:var(--paper-deep);}
-  .gen-list{padding:16px 14px 20px;flex:1;overflow-x:auto;}
+  .connector-v{width:2px;height:26px;background:var(--gold);}
 
-  /* cây phả hệ cha - con lồng nhau */
-  .person-tree, .person-tree ul{list-style:none;margin:0;padding-left:16px;}
-  .person-tree{padding-left:0;}
-  .person-tree li{position:relative;padding:7px 0 7px 14px;border-left:2px dashed var(--paper-deep);}
-  .person-tree > li{border-left:none;padding-left:0;}
-  .person-tree li::before{content:"";position:absolute;left:0;top:19px;width:12px;height:2px;background:var(--paper-deep);}
-  .person-tree > li::before{display:none;}
-  .person-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
-  .person-row .pname{font-family:'Noto Serif',serif;font-weight:700;font-size:.88rem;color:var(--ink);}
-  .person-row .gen-tag{font-size:.6rem;background:var(--paper-deep);color:var(--ink-soft);padding:2px 6px;border-radius:8px;font-weight:600;white-space:nowrap;}
-  .person-row button{font-size:.66rem;padding:2px 7px;border-radius:4px;border:1px solid var(--paper-deep);background:#fff;cursor:pointer;color:var(--ink-soft);white-space:nowrap;}
-  .person-row button:hover{border-color:var(--gold);color:var(--lacquer);}
-  .spouse-tag{font-size:.72rem;background:rgba(184,134,59,.14);color:var(--lacquer-dark);padding:2px 6px;border-radius:8px;cursor:pointer;white-space:nowrap;}
-  .spouse-tag i{font-style:normal;margin-left:4px;color:var(--lacquer);font-weight:700;}
-  .spouse-tag i:hover{color:#000;}
+  /* thanh chọn chi (tab) */
+  .chi-tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:26px 0 28px;}
+  .chi-tab-btn{
+    background:#fff8ea;border:1.5px solid var(--paper-deep);border-radius:24px;
+    padding:9px 18px;font-size:.86rem;font-weight:600;color:var(--ink-soft);
+    cursor:pointer;transition:.15s;font-family:'Be Vietnam Pro',sans-serif;
+  }
+  .chi-tab-btn:hover{border-color:var(--gold);color:var(--lacquer);}
+  .chi-tab-btn.active{background:var(--lacquer);border-color:var(--lacquer);color:var(--paper);}
+  .chi-tab-btn .cnt{opacity:.75;font-weight:400;font-size:.78rem;}
+
+  /* khung chi tiết 1 chi */
+  .chi-detail{background:#fff8ea;border:1px solid var(--paper-deep);border-radius:10px;box-shadow:var(--shadow);overflow:hidden;}
+  .chi-detail-head{background:var(--jade);color:var(--paper);padding:18px 24px;}
+  .chi-detail-head h3{font-size:1.2rem;color:var(--paper);}
+  .chi-detail-head p{margin:4px 0 0;font-size:.8rem;color:var(--paper-deep);}
+  .chi-detail-body{padding:22px 20px 26px;overflow-x:auto;}
+
+  /* thẻ từng người - rõ ràng, dễ bấm */
+  .person-card{
+    background:#fff;border:1px solid var(--paper-deep);border-radius:8px;
+    padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 6px rgba(28,21,18,.06);
+  }
+  .person-card.is-head{border-color:var(--gold);background:#fffaf0;}
+  .person-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .person-top .pname{font-family:'Noto Serif',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
+  .person-top .gen-tag{font-size:.66rem;background:var(--paper-deep);color:var(--ink-soft);padding:3px 9px;border-radius:10px;font-weight:700;white-space:nowrap;}
+  .spouse-line{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;}
+  .spouse-tag{
+    display:inline-flex;align-items:center;gap:6px;font-size:.78rem;
+    background:rgba(184,134,59,.14);color:var(--lacquer-dark);padding:4px 6px 4px 10px;border-radius:14px;
+  }
+  .spouse-tag .sp-name{cursor:pointer;}
+  .spouse-tag .sp-name:hover{text-decoration:underline;}
+  .spouse-tag i{font-style:normal;cursor:pointer;color:var(--lacquer);font-weight:700;width:16px;height:16px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;}
+  .spouse-tag i:hover{background:var(--lacquer);color:#fff;}
+  .action-row{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;}
+  .action-row button{
+    font-size:.8rem;padding:7px 13px;border-radius:6px;border:1px solid var(--paper-deep);
+    background:#fff;cursor:pointer;color:var(--ink-soft);font-weight:600;white-space:nowrap;transition:.15s;
+  }
+  .action-row button.act-primary{border-color:var(--jade);color:var(--jade);}
+  .action-row button.act-primary:hover{background:var(--jade);color:#fff;}
+  .action-row button.act-gold{border-color:var(--gold);color:var(--gold);}
+  .action-row button.act-gold:hover{background:var(--gold);color:#fff;}
+  .action-row button.act-edit:hover{border-color:var(--ink);color:var(--ink);}
+  .action-row button.act-danger{border-color:var(--lacquer-light);color:var(--lacquer);}
+  .action-row button.act-danger:hover{background:var(--lacquer);color:#fff;}
+
+  .children-wrap{margin-left:16px;padding-left:18px;border-left:2px dashed var(--paper-deep);margin-top:-2px;}
+  .children-wrap .person-card{margin-top:10px;}
+  .children-empty{font-size:.8rem;color:var(--ink-soft);opacity:.65;font-style:italic;padding:4px 0 2px 4px;}
+
+  /* modal thêm/sửa (dùng chung) */
+  .app-modal{display:none;position:fixed;inset:0;background:rgba(28,21,18,.7);z-index:300;align-items:center;justify-content:center;padding:20px;}
+  .app-modal .box{background:#fdf6e6;border:1px solid var(--gold);border-radius:10px;padding:28px;max-width:360px;width:100%;box-shadow:var(--shadow);}
+  .app-modal .box h3{font-size:1.05rem;margin-bottom:14px;}
+  .app-modal .box input{width:100%;padding:10px 12px;border:1px solid var(--paper-deep);border-radius:6px;font-family:inherit;font-size:.92rem;margin-bottom:6px;}
+  .app-modal .box .hint{font-size:.76rem;color:var(--ink-soft);margin-bottom:14px;}
+  .app-modal .box .row{display:flex;gap:8px;margin-top:14px;}
 
   /* ---------- quy che ---------- */
   .quyche-doc{
@@ -270,14 +300,12 @@
     nav.open ul{display:flex;flex-direction:column;position:absolute;top:100%;left:0;right:0;background:var(--ink);padding:10px 24px 16px;}
     .card-grid{grid-template-columns:1fr;}
     .stat-row{grid-template-columns:repeat(2,1fr);}
-    .branches{flex-direction:column;align-items:center;}
-    .branches::before{display:none;}
-
+    .chi-detail-body{padding:16px 12px 20px;}
+    .children-wrap{margin-left:8px;padding-left:12px;}
     .dg-layout{grid-template-columns:1fr;}
     .dg-form{position:static;}
     .dg-summary{grid-template-columns:1fr;}
     .dg-per-chi{grid-template-columns:repeat(2,1fr);}
-    .branch-col{max-width:340px;padding:0;}
     .tv-grid{grid-template-columns:1fr;}
     .foot-grid{grid-template-columns:1fr;}
     .quyche-doc{padding:30px 22px;}
@@ -404,22 +432,45 @@
     <div class="section-head">
       <div class="eyebrow">Cây gia phả</div>
       <h2>Chi Trưởng &amp; Bốn Chi Họ Mà</h2>
-      <p>Sơ đồ Thủy Tổ và 5 chi: Chi Trưởng, Chi Một, Chi Hai, Chi Ba, Chi Bốn. Mỗi chi có thể tự thêm thành viên và thêm đời mới cho cây của chi mình.</p>
+      <p>Chọn 1 chi bên dưới để xem và chỉnh sửa đầy đủ — không cần nhìn cả 5 chi cùng lúc cho đỡ rối mắt.</p>
     </div>
 
-    <div class="tree-note">
-      ⚠️ <strong>Lưu ý:</strong> Tên đang hiển thị là <strong>dữ liệu mẫu</strong>. Mỗi người có 3 nút: <strong>"+ Vợ/Chồng"</strong> (thêm vợ/chồng, có thể thêm nhiều lần nếu cần), <strong>"+ Con"</strong> (thêm con của đúng người đó) và <strong>"Sửa"</strong> (đổi tên). Bấm vào nhãn ⚭ tên vợ/chồng để sửa, bấm dấu × để xóa.
+    <div class="tree-note editor-only">
+      💡 <strong>Cách dùng:</strong> mỗi người có 4 nút: <strong>➕ Vợ/Chồng</strong>, <strong>➕ Con</strong>, <strong>✏️ Sửa tên</strong>, <strong>🗑️ Xóa</strong>. Bấm nút sẽ hiện ô nhập tên rõ ràng, gõ xong bấm Lưu.
+    </div>
+    <div class="tree-note" id="notEditorTreeNotice">
+      🔒 Bạn đang ở chế độ <strong>chỉ xem</strong>. Đăng nhập Ban liên lạc (góc trên bên phải) để thêm/sửa/xóa người trong gia phả.
     </div>
 
     <div class="tree">
       <div class="node tong"><span class="role">Đời thứ 1 · Thủy Tổ</span>Mà Văn [...]</div>
       <div class="connector-v"></div>
-      <div class="branches" id="branchesWrap">
-        <!-- 4 chi được render bằng JS: truong, mot, hai, ba -->
+    </div>
+
+    <div class="chi-tabs" id="chiTabs"></div>
+
+    <div class="chi-detail">
+      <div class="chi-detail-head">
+        <h3 id="chiDetailTitle">—</h3>
+        <p id="chiDetailSub">—</p>
       </div>
+      <div class="chi-detail-body" id="chiDetail"></div>
     </div>
   </div>
 </section>
+
+<!-- ================= MODAL THÊM / SỬA NGƯỜI ================= -->
+<div id="personModal" class="app-modal">
+  <div class="box">
+    <h3 id="pmTitle">Thêm người</h3>
+    <input type="text" id="pmInput" placeholder="Nhập tên...">
+    <div class="hint" id="pmHint"></div>
+    <div class="row">
+      <button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="submitPersonModal()">Lưu</button>
+      <button class="btn btn-outline" style="flex:0;color:var(--ink-soft);border-color:var(--paper-deep);" onclick="closePersonModal()">Hủy</button>
+    </div>
+  </div>
+</div>
 
 <div class="tile-divider"></div>
 
@@ -773,61 +824,75 @@
     return d && d.root && typeof d.root.name === 'string' && Array.isArray(d.root.children);
   }
 
-  function buildBranchesHtml(){
-    const order = ['truong','mot','hai','ba','bon'];
-    return order.map(key=>{
+  const CHI_ORDER = ['truong','mot','hai','ba','bon'];
+  let activeChiKey = 'truong';
+
+  // đếm tổng số người trong 1 chi (kể cả vợ/chồng)
+  function countPeople(node){
+    let n = 1 + (node.spouses ? node.spouses.length : 0);
+    node.children.forEach(c => n += countPeople(c));
+    return n;
+  }
+
+  function renderTabs(){
+    const tabs = document.getElementById('chiTabs');
+    tabs.innerHTML = CHI_ORDER.map(key=>{
       const d = treeData[key];
-      const cardClass = key==='truong' ? 'chi-card chi-truong' : 'chi-card';
-      return `
-      <div class="branch-col">
-        <div class="connector-v"></div>
-        <div class="${cardClass}" data-chi="${key}">
-          <div class="chi-head">${escapeHtml(d.title)}<span>Đứng đầu: ${escapeHtml(d.root.name)}</span></div>
-          <div class="gen-list">
-            <ul class="person-tree" id="ptree-${key}"></ul>
-          </div>
-        </div>
-      </div>`;
+      const cls = 'chi-tab-btn' + (key===activeChiKey ? ' active' : '');
+      return `<button class="${cls}" onclick="switchChiTab('${key}')">${escapeHtml(d.title)} <span class="cnt">(${countPeople(d.root)} người)</span></button>`;
     }).join('');
   }
 
-  // render đệ quy 1 người và các con của người đó
-  function renderPerson(key, node, depth){
+  // render đệ quy 1 người và các con của người đó, dạng thẻ rõ ràng
+  function renderPerson(key, node, depth, isRoot){
     const spouses = node.spouses || [];
-    const spouseHtml = spouses.map(s=>`
-        <span class="spouse-tag" onclick="renameSpouse('${key}','${node.id}','${s.id}')" title="Bấm để sửa tên">
-          ⚭ ${escapeHtml(s.name)}
-          <i class="editor-only" onclick="event.stopPropagation();removeSpouse('${key}','${node.id}','${s.id}')" title="Xóa">×</i>
-        </span>`).join('');
+    const spouseHtml = spouses.length ? `<div class="spouse-line">${spouses.map(s=>`
+        <span class="spouse-tag">
+          ⚭ <span class="sp-name" onclick="openRenameSpouseModal('${key}','${node.id}','${s.id}')" title="Bấm để sửa tên">${escapeHtml(s.name)}</span>
+          <i class="editor-only" onclick="removeSpouse('${key}','${node.id}','${s.id}')" title="Xóa vợ/chồng">×</i>
+        </span>`).join('')}</div>` : '';
     const childrenHtml = node.children.length
-      ? `<ul>${node.children.map(c=>renderPerson(key, c, depth+1)).join('')}</ul>`
-      : '';
+      ? `<div class="children-wrap">${node.children.map(c=>renderPerson(key, c, depth+1, false)).join('')}</div>`
+      : (depth===2 ? '' : '');
     return `
-      <li>
-        <div class="person-row">
+      <div class="person-card${isRoot?' is-head':''}">
+        <div class="person-top">
           <span class="pname">${escapeHtml(node.name)}</span>
           <span class="gen-tag">Đời ${depth}</span>
-          ${spouseHtml}
-          <button class="editor-only" title="Thêm vợ/chồng" onclick="addSpouse('${key}','${node.id}')">+ Vợ/Chồng</button>
-          <button class="editor-only" title="Thêm con" onclick="addChild('${key}','${node.id}')">+ Con</button>
-          <button class="editor-only" title="Sửa tên" onclick="renamePerson('${key}','${node.id}')">Sửa</button>
-          ${depth>2 ? `<button class="editor-only" title="Xóa" onclick="deletePerson('${key}','${node.id}')">Xóa</button>` : ''}
         </div>
-        ${childrenHtml}
-      </li>`;
+        ${spouseHtml}
+        <div class="action-row editor-only">
+          <button class="act-gold" onclick="openAddSpouseModal('${key}','${node.id}')">➕ Vợ/Chồng</button>
+          <button class="act-primary" onclick="openAddChildModal('${key}','${node.id}')">➕ Con</button>
+          <button class="act-edit" onclick="openRenamePersonModal('${key}','${node.id}')">✏️ Sửa tên</button>
+          ${depth>2 ? `<button class="act-danger" onclick="deletePerson('${key}','${node.id}')">🗑️ Xóa</button>` : ''}
+        </div>
+      </div>
+      ${childrenHtml}`;
   }
 
+  function renderDetail(){
+    const d = treeData[activeChiKey];
+    document.getElementById('chiDetailTitle').textContent = d.title;
+    document.getElementById('chiDetailSub').textContent = `Đứng đầu: ${d.root.name} · ${countPeople(d.root)} người`;
+    document.getElementById('chiDetail').innerHTML = renderPerson(activeChiKey, d.root, 2, true);
+  }
+
+  function switchChiTab(key){
+    activeChiKey = key;
+    renderTabs();
+    renderDetail();
+  }
+
+  // giữ tên hàm renderChi để các chỗ gọi cũ không lỗi — luôn vẽ lại tab đang mở
   function renderChi(key){
-    const ul = document.getElementById('ptree-'+key);
-    if(!ul) return;
-    const data = treeData[key];
-    // đời 2 = người đứng đầu chi (con của Thủy Tổ đời 1)
-    ul.innerHTML = renderPerson(key, data.root, 2);
+    renderTabs();
+    if(key === activeChiKey) renderDetail();
   }
 
   function renderAllChi(){
-    document.getElementById('branchesWrap').innerHTML = buildBranchesHtml();
-    Object.keys(treeData).forEach(renderChi);
+    renderTabs();
+    renderDetail();
   }
 
   function findNode(node, id){
@@ -880,63 +945,88 @@
     }
   }
 
-  async function addChild(key, parentId){
+  // ---------- modal thêm/sửa dùng chung (thay cho prompt()) ----------
+  let pmHandler = null; // hàm được gọi khi bấm Lưu
+
+  function openPersonModal(title, hint, defaultValue, onSave){
+    document.getElementById('pmTitle').textContent = title;
+    document.getElementById('pmHint').textContent = hint || '';
+    const input = document.getElementById('pmInput');
+    input.value = defaultValue || '';
+    pmHandler = onSave;
+    document.getElementById('personModal').style.display = 'flex';
+    setTimeout(()=>{ input.focus(); input.select(); }, 50);
+  }
+  function closePersonModal(){
+    document.getElementById('personModal').style.display = 'none';
+    pmHandler = null;
+  }
+  function submitPersonModal(){
+    const val = document.getElementById('pmInput').value.trim();
+    if(!val){ showToast('Vui lòng nhập tên.'); return; }
+    if(pmHandler) pmHandler(val);
+    closePersonModal();
+  }
+
+  function openAddChildModal(key, parentId){
     if(!requireEditor()) return;
-    const name = window.prompt('Tên người con muốn thêm:');
-    if(!name || !name.trim()) return;
     const parentNode = findNode(treeData[key].root, parentId);
     if(!parentNode) return;
-    parentNode.children.push(person(name.trim()));
-    await saveTree(key);
-    renderChi(key);
-    showToast(`Đã thêm "${name.trim()}" là con của "${parentNode.name}".`);
+    openPersonModal('Thêm con', `Người con này sẽ là con của "${parentNode.name}".`, '', async (name)=>{
+      parentNode.children.push(person(name));
+      await saveTree(key);
+      renderDetail();
+      showToast(`Đã thêm "${name}" là con của "${parentNode.name}".`);
+    });
   }
 
-  async function addSpouse(key, personId){
+  function openAddSpouseModal(key, personId){
     if(!requireEditor()) return;
-    const name = window.prompt('Tên vợ/chồng:');
-    if(!name || !name.trim()) return;
     const node = findNode(treeData[key].root, personId);
     if(!node) return;
-    if(!node.spouses) node.spouses = [];
-    node.spouses.push(spouse(name.trim()));
-    await saveTree(key);
-    renderChi(key);
-    showToast(`Đã thêm vợ/chồng cho "${node.name}".`);
+    openPersonModal('Thêm vợ/chồng', `Thêm vợ/chồng cho "${node.name}".`, '', async (name)=>{
+      if(!node.spouses) node.spouses = [];
+      node.spouses.push(spouse(name));
+      await saveTree(key);
+      renderDetail();
+      showToast(`Đã thêm vợ/chồng cho "${node.name}".`);
+    });
   }
 
-  async function renameSpouse(key, personId, spouseId){
+  function openRenamePersonModal(key, id){
+    if(!requireEditor()) return;
+    const node = findNode(treeData[key].root, id);
+    if(!node) return;
+    openPersonModal('Sửa tên', '', node.name, async (name)=>{
+      node.name = name;
+      await saveTree(key);
+      renderDetail();
+      showToast('Đã cập nhật tên.');
+    });
+  }
+
+  function openRenameSpouseModal(key, personId, spouseId){
     if(!requireEditor()) return;
     const node = findNode(treeData[key].root, personId);
     const sp = node && (node.spouses||[]).find(s=>s.id===spouseId);
     if(!sp) return;
-    const name = window.prompt('Sửa tên:', sp.name);
-    if(!name || !name.trim()) return;
-    sp.name = name.trim();
-    await saveTree(key);
-    renderChi(key);
+    openPersonModal('Sửa tên vợ/chồng', '', sp.name, async (name)=>{
+      sp.name = name;
+      await saveTree(key);
+      renderDetail();
+      showToast('Đã cập nhật tên.');
+    });
   }
 
   async function removeSpouse(key, personId, spouseId){
     if(!requireEditor()) return;
     const node = findNode(treeData[key].root, personId);
     if(!node || !node.spouses) return;
+    if(!window.confirm('Xóa người này khỏi danh sách vợ/chồng?')) return;
     node.spouses = node.spouses.filter(s=>s.id!==spouseId);
     await saveTree(key);
-    renderChi(key);
+    renderDetail();
     showToast('Đã xóa.');
-  }
-
-  async function renamePerson(key, id){
-    if(!requireEditor()) return;
-    const node = findNode(treeData[key].root, id);
-    if(!node) return;
-    const name = window.prompt('Sửa tên:', node.name);
-    if(!name || !name.trim()) return;
-    node.name = name.trim();
-    await saveTree(key);
-    renderChi(key);
-    showToast('Đã cập nhật tên.');
   }
 
   async function deletePerson(key, id){
@@ -948,10 +1038,12 @@
     const node = findNode(treeData[key].root, id);
     if(node && node.children.length>0){
       if(!window.confirm(`"${node.name}" đang có ${node.children.length} người con bên dưới. Xóa sẽ xóa luôn tất cả. Tiếp tục?`)) return;
+    }else{
+      if(!window.confirm(`Xóa "${node ? node.name : ''}"?`)) return;
     }
     removeNodeById(treeData[key].root, id);
     await saveTree(key);
-    renderChi(key);
+    renderDetail();
     showToast('Đã xóa.');
   }
 
