@@ -82,6 +82,7 @@
   body:not(.is-editor) .editor-only{display:none !important;}
   body.is-editor #notEditorNotice{display:none !important;}
   body.is-editor #notEditorTreeNotice{display:none !important;}
+  body.is-editor #notEditorQCNotice{display:none !important;}
 
   /* ---------- hero ---------- */
   .hero{
@@ -225,9 +226,17 @@
   .quyche-doc h3.title{text-align:center;font-size:1.3rem;margin-bottom:4px;}
   .quyche-doc .subt{text-align:center;font-size:.8rem;color:var(--ink-soft);letter-spacing:.05em;margin-bottom:30px;}
   .dieu{margin-bottom:22px;}
+  .dieu-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap;}
   .dieu h4{font-family:'Noto Serif',serif;font-size:1rem;color:var(--lacquer);margin:0 0 6px;}
   .dieu p, .dieu li{font-size:.92rem;color:var(--ink-soft);margin:0 0 6px;}
   .dieu ul{margin:6px 0 0;padding-left:20px;}
+  .dieu-actions{display:flex;gap:6px;flex-shrink:0;}
+  .dieu-actions button{
+    font-size:.72rem;padding:4px 10px;border-radius:5px;border:1px solid var(--paper-deep);
+    background:#fff;cursor:pointer;color:var(--ink-soft);font-weight:600;white-space:nowrap;
+  }
+  .dieu-actions button.act-edit:hover{border-color:var(--ink);color:var(--ink);}
+  .dieu-actions button.act-danger:hover{border-color:var(--lacquer);background:var(--lacquer);color:#fff;}
 
   /* ---------- dong gop / thu chi ---------- */
   .dg-layout{display:grid;grid-template-columns:340px 1fr;gap:32px;align-items:start;}
@@ -483,49 +492,49 @@
       <p>Bản dự thảo khung quy chế — Hội đồng gia tộc cần họp thông qua và điều chỉnh nội dung cho phù hợp thực tế.</p>
     </div>
 
+    <div class="tree-note editor-only">
+      💡 Mỗi điều có 2 nút: <strong>✏️ Sửa</strong> và <strong>🗑️ Xóa mục</strong>. Bấm <strong>"➕ Thêm mục"</strong> ở cuối văn bản để thêm 1 điều mới.
+    </div>
+    <div class="tree-note" id="notEditorQCNotice">
+      🔒 Bạn đang ở chế độ <strong>chỉ xem</strong>. Đăng nhập Ban liên lạc để thêm/sửa/xóa nội dung quy chế.
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+      <button class="btn btn-lacquer btn-sm" onclick="exportQuyCheWord()">⬇ Xuất Word</button>
+    </div>
+
     <div class="quyche-doc">
       <h3 class="title">QUY CHẾ TỔ CHỨC VÀ HOẠT ĐỘNG DÒNG HỌ MÀ</h3>
       <p class="subt">(Dự thảo — Áp dụng cho Chi Trưởng và các Chi trực thuộc)</p>
 
-      <div class="dieu">
-        <h4>Điều 1. Mục đích</h4>
-        <p>Gìn giữ, tôn vinh truyền thống, gia phong dòng họ; kết nối con cháu các chi; thống nhất việc thờ cúng tổ tiên, biên soạn và cập nhật gia phả.</p>
+      <div id="quyCheList">
+        <p style="text-align:center;color:var(--ink-soft);font-style:italic;">Đang tải nội dung quy chế...</p>
       </div>
-      <div class="dieu">
-        <h4>Điều 2. Cơ cấu tổ chức</h4>
-        <ul>
-          <li>Hội đồng gia tộc: gồm đại diện Chi Trưởng và trưởng của ba chi còn lại.</li>
-          <li>Trưởng họ: do Hội đồng gia tộc suy tôn, nhiệm kỳ theo quy định riêng.</li>
-          <li>Ban liên lạc từng chi: hỗ trợ trưởng chi tổng hợp thông tin, thông báo trong chi.</li>
-        </ul>
-      </div>
-      <div class="dieu">
-        <h4>Điều 3. Quyền và nghĩa vụ của con cháu</h4>
-        <ul>
-          <li>Được cung cấp thông tin gia phả, tham dự các ngày giỗ, họp họ.</li>
-          <li>Có nghĩa vụ đóng góp quỹ họ theo mức Hội đồng gia tộc thống nhất.</li>
-          <li>Có trách nhiệm cập nhật thông tin thành viên mới (sinh, kết hôn, mất) cho ban liên lạc chi.</li>
-        </ul>
-      </div>
-      <div class="dieu">
-        <h4>Điều 4. Quỹ dòng họ</h4>
-        <p>Quỹ hình thành từ đóng góp tự nguyện của con cháu (khoản thu), dùng cho giỗ tổ, tu sửa từ đường/phần mộ, khuyến học, hỗ trợ thành viên khó khăn (khoản chi). Thu – chi quỹ được ghi nhận và công khai định kỳ trước Hội đồng gia tộc.</p>
-      </div>
-      <div class="dieu">
-        <h4>Điều 5. Giỗ tổ và sinh hoạt chung</h4>
-        <p>Ngày giỗ Tổ được tổ chức hằng năm, luân phiên hoặc cố định tại từ đường (do Hội đồng gia tộc quyết định). Mỗi chi cử đại diện tham dự đầy đủ.</p>
-      </div>
-      <div class="dieu">
-        <h4>Điều 6. Khen thưởng – khuyến học</h4>
-        <p>Xét khen thưởng con cháu có thành tích học tập, công tác xuất sắc từ nguồn quỹ khuyến học của dòng họ, theo tiêu chí do Hội đồng gia tộc ban hành.</p>
-      </div>
-      <div class="dieu">
-        <h4>Điều 7. Điều khoản thi hành</h4>
-        <p>Quy chế có hiệu lực sau khi được Hội đồng gia tộc thông qua; được sửa đổi, bổ sung khi cần thiết theo đề xuất của các chi.</p>
-      </div>
+
+      <button class="btn btn-jade editor-only" style="width:100%;justify-content:center;margin-top:10px;" onclick="openAddDieuModal()">➕ Thêm mục</button>
     </div>
   </div>
 </section>
+
+<!-- ================= MODAL THÊM / SỬA ĐIỀU QUY CHẾ ================= -->
+<div id="qcModal" class="app-modal">
+  <div class="box" style="max-width:480px;">
+    <h3 id="qcTitle">Thêm mục quy chế</h3>
+    <div class="field" style="margin-bottom:10px;">
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Tiêu đề điều (không cần ghi số thứ tự)</label>
+      <input type="text" id="qcInputTitle" placeholder="VD: Mục đích">
+    </div>
+    <div class="field" style="margin-bottom:6px;">
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Nội dung</label>
+      <textarea id="qcInputContent" rows="6" style="width:100%;padding:10px 12px;border:1px solid var(--paper-deep);border-radius:6px;font-family:inherit;font-size:.88rem;resize:vertical;" placeholder="Nhập nội dung. Mỗi dòng bắt đầu bằng dấu - sẽ tự hiển thị thành gạch đầu dòng."></textarea>
+    </div>
+    <div class="hint">Mẹo: để tạo danh sách gạch đầu dòng, mỗi ý xuống dòng riêng và bắt đầu bằng dấu "- ".</div>
+    <div class="row">
+      <button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="submitQCModal()">Lưu</button>
+      <button class="btn btn-outline" style="flex:0;color:var(--ink-soft);border-color:var(--paper-deep);" onclick="closeQCModal()">Hủy</button>
+    </div>
+  </div>
+</div>
 
 <div class="tile-divider jade flip"></div>
 
@@ -1048,6 +1057,154 @@
   }
 
   loadTree();
+
+  // ================= QUY CHẾ =================
+  let quyCheList = [];
+  let qcHandler = null; // hàm gọi khi bấm Lưu trong modal quy chế
+
+  // chuyển nội dung text sang HTML: dòng bắt đầu bằng "- " thành gạch đầu dòng, còn lại là đoạn văn
+  function renderDieuContent(content){
+    const lines = (content || '').split('\n');
+    let html = '';
+    let listBuf = [];
+    function flushList(){
+      if(listBuf.length){
+        html += '<ul>' + listBuf.map(li=>`<li>${escapeHtml(li)}</li>`).join('') + '</ul>';
+        listBuf = [];
+      }
+    }
+    lines.forEach(line=>{
+      const t = line.trim();
+      if(t.startsWith('- ')){
+        listBuf.push(t.slice(2).trim());
+      }else{
+        flushList();
+        if(t) html += `<p>${escapeHtml(t)}</p>`;
+      }
+    });
+    flushList();
+    return html;
+  }
+
+  async function loadQuyChe(){
+    try{
+      const { data, error } = await sb.from('quy_che').select('*').order('created_at', { ascending:true });
+      if(error) throw error;
+      quyCheList = data || [];
+    }catch(e){
+      quyCheList = [];
+      showToast('Không tải được nội dung quy chế từ Supabase.');
+    }
+    renderQuyChe();
+  }
+
+  function renderQuyChe(){
+    const el = document.getElementById('quyCheList');
+    if(quyCheList.length===0){
+      el.innerHTML = '<p style="text-align:center;color:var(--ink-soft);font-style:italic;">Chưa có nội dung quy chế.</p>';
+      return;
+    }
+    el.innerHTML = quyCheList.map((d,i)=>`
+      <div class="dieu">
+        <div class="dieu-head">
+          <h4>Điều ${i+1}. ${escapeHtml(d.title)}</h4>
+          <div class="dieu-actions editor-only">
+            <button class="act-edit" onclick="openEditDieuModal('${d.id}')">✏️ Sửa</button>
+            <button class="act-danger" onclick="deleteDieu('${d.id}')">🗑️ Xóa mục</button>
+          </div>
+        </div>
+        ${renderDieuContent(d.content)}
+      </div>`).join('');
+  }
+
+  function exportQuyCheWord(){
+    if(quyCheList.length===0){ showToast('Chưa có nội dung để xuất.'); return; }
+    const bodyHtml = quyCheList.map((d,i)=>`
+      <h3 style="color:#7A2417;font-size:15px;margin-top:18px;margin-bottom:4px;">Điều ${i+1}. ${escapeHtml(d.title)}</h3>
+      ${renderDieuContent(d.content)}
+    `).join('');
+    const html = `
+      <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+      <head><meta charset="utf-8"><title>Quy che Dong Ho Ma</title></head>
+      <body style="font-family:'Times New Roman', serif; font-size:13px; line-height:1.5;">
+        <h1 style="text-align:center;font-size:18px;">QUY CHẾ TỔ CHỨC VÀ HOẠT ĐỘNG DÒNG HỌ MÀ</h1>
+        <p style="text-align:center;font-style:italic;font-size:13px;">(Dự thảo — Áp dụng cho Chi Trưởng và các Chi trực thuộc)</p>
+        ${bodyHtml}
+      </body></html>`;
+    const blob = new Blob(['\ufeff', html], {type:'application/msword'});
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'quy-che-dong-ho-ma.doc';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Đã xuất file Word.');
+  }
+
+  function openQCModal(title, defTitle, defContent, onSave){
+    document.getElementById('qcTitle').textContent = title;
+    document.getElementById('qcInputTitle').value = defTitle || '';
+    document.getElementById('qcInputContent').value = defContent || '';
+    qcHandler = onSave;
+    document.getElementById('qcModal').style.display = 'flex';
+  }
+  function closeQCModal(){
+    document.getElementById('qcModal').style.display = 'none';
+    qcHandler = null;
+  }
+  function submitQCModal(){
+    const title = document.getElementById('qcInputTitle').value.trim();
+    const content = document.getElementById('qcInputContent').value.trim();
+    if(!title || !content){ showToast('Vui lòng nhập đủ tiêu đề và nội dung.'); return; }
+    if(qcHandler) qcHandler(title, content);
+    closeQCModal();
+  }
+
+  function openAddDieuModal(){
+    if(!requireEditor()) return;
+    openQCModal('Thêm mục quy chế', '', '', async (title, content)=>{
+      try{
+        const { error } = await sb.from('quy_che').insert({ title, content });
+        if(error) throw error;
+        await loadQuyChe();
+        showToast('Đã thêm mục mới.');
+      }catch(e){
+        showToast('Thêm mục thất bại, vui lòng thử lại.');
+      }
+    });
+  }
+
+  function openEditDieuModal(id){
+    if(!requireEditor()) return;
+    const d = quyCheList.find(x=>x.id===id);
+    if(!d) return;
+    openQCModal('Sửa mục quy chế', d.title, d.content, async (title, content)=>{
+      try{
+        const { error } = await sb.from('quy_che').update({ title, content }).eq('id', id);
+        if(error) throw error;
+        await loadQuyChe();
+        showToast('Đã cập nhật mục.');
+      }catch(e){
+        showToast('Cập nhật thất bại, vui lòng thử lại.');
+      }
+    });
+  }
+
+  async function deleteDieu(id){
+    if(!requireEditor()) return;
+    const d = quyCheList.find(x=>x.id===id);
+    if(!window.confirm(`Xóa mục "${d ? d.title : ''}"?`)) return;
+    try{
+      const { error } = await sb.from('quy_che').delete().eq('id', id);
+      if(error) throw error;
+      await loadQuyChe();
+      showToast('Đã xóa mục.');
+    }catch(e){
+      showToast('Xóa thất bại, vui lòng thử lại.');
+    }
+  }
+
+  loadQuyChe();
 
   // ================= THU - CHI =================
   let contributions = [];
