@@ -83,6 +83,7 @@
   body.is-editor #notEditorNotice{display:none !important;}
   body.is-editor #notEditorTreeNotice{display:none !important;}
   body.is-editor #notEditorQCNotice{display:none !important;}
+  body.is-editor #notEditorHHNotice{display:none !important;}
 
   /* ---------- hero ---------- */
   .hero{
@@ -177,7 +178,7 @@
     background:#fff;border:1px solid var(--paper-deep);border-radius:8px;
     padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 6px rgba(28,21,18,.06);
   }
-  .person-card.is-head{border-color:var(--gold);background:#fffaf0;}
+  .person-card.is-head{box-shadow:0 0 0 2px var(--gold), var(--shadow);}
   .person-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .person-top .pname{font-family:'Noto Serif',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
   .person-top .gen-tag{font-size:.66rem;background:var(--paper-deep);color:var(--ink-soft);padding:3px 9px;border-radius:10px;font-weight:700;white-space:nowrap;}
@@ -207,6 +208,53 @@
   .children-wrap{margin-left:16px;padding-left:18px;border-left:2px dashed var(--paper-deep);margin-top:-2px;}
   .children-wrap .person-card{margin-top:10px;}
   .children-empty{font-size:.8rem;color:var(--ink-soft);opacity:.65;font-style:italic;padding:4px 0 2px 4px;}
+
+  /* ---------- màu phân biệt theo từng đời (thế hệ) ---------- */
+  .person-card{border-left:5px solid var(--paper-deep);}
+  .person-card.gen-2{border-left-color:#8a1f13;background:#fdf1ec;}
+  .person-card.gen-2 .gen-tag{background:#8a1f13;color:#fff;}
+  .person-card.gen-3{border-left-color:#b8863b;background:#fdf6e6;}
+  .person-card.gen-3 .gen-tag{background:#b8863b;color:#fff;}
+  .person-card.gen-4{border-left-color:#3f5d4e;background:#f1f6f2;}
+  .person-card.gen-4 .gen-tag{background:#3f5d4e;color:#fff;}
+  .person-card.gen-5{border-left-color:#2b5a7a;background:#eef4f8;}
+  .person-card.gen-5 .gen-tag{background:#2b5a7a;color:#fff;}
+  .person-card.gen-6{border-left-color:#7a4a9c;background:#f4eef8;}
+  .person-card.gen-6 .gen-tag{background:#7a4a9c;color:#fff;}
+  .person-card.gen-7{border-left-color:#a13a26;background:#fdf0ec;}
+  .person-card.gen-7 .gen-tag{background:#a13a26;color:#fff;}
+  .gen-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 20px;font-size:.78rem;color:var(--ink-soft);}
+  .gen-legend .lg-item{display:flex;align-items:center;gap:6px;}
+  .gen-legend .lg-dot{width:12px;height:12px;border-radius:3px;display:inline-block;}
+
+  /* ---------- số điện thoại trên thẻ người ---------- */
+  .phone-line{margin-top:6px;font-size:.82rem;color:var(--ink-soft);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .phone-line .ph-val{font-weight:600;color:var(--jade);}
+  .phone-line .ph-empty{font-style:italic;opacity:.6;}
+
+  /* ---------- danh sách dòng họ (tab) ---------- */
+  .ds-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center;}
+  .ds-toolbar input, .ds-toolbar select{padding:9px 12px;border:1px solid var(--paper-deep);border-radius:6px;font-family:inherit;font-size:.88rem;background:#fff;}
+  .ds-toolbar input{flex:1;min-width:200px;}
+  table.ds-table{width:100%;border-collapse:collapse;background:#fff8ea;border-radius:8px;overflow:hidden;box-shadow:var(--shadow);}
+  table.ds-table th{background:var(--ink);color:var(--paper-deep);text-align:left;padding:11px 12px;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;}
+  table.ds-table td{padding:11px 12px;font-size:.87rem;border-bottom:1px solid var(--paper-deep);}
+  table.ds-table tr:last-child td{border-bottom:none;}
+  table.ds-table td.ph{color:var(--jade);font-weight:600;white-space:nowrap;}
+
+  /* ---------- thông báo hiếu hỉ ---------- */
+  .notify-bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#fff8ea;border:1px solid var(--paper-deep);border-radius:8px;padding:14px 18px;margin-bottom:24px;}
+  .notify-bar p{margin:0;font-size:.84rem;color:var(--ink-soft);}
+  .hh-grid{display:grid;gap:16px;}
+  .hh-card{background:#fff8ea;border:1px solid var(--paper-deep);border-left:5px solid var(--lacquer);border-radius:8px;padding:18px 20px;box-shadow:var(--shadow);}
+  .hh-card.loai-hi{border-left-color:var(--jade);}
+  .hh-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between;}
+  .hh-badge{font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:10px;background:rgba(122,36,23,.12);color:var(--lacquer);}
+  .hh-card.loai-hi .hh-badge{background:rgba(63,93,78,.15);color:var(--jade);}
+  .hh-card h4{font-size:1.02rem;margin:8px 0 4px;}
+  .hh-meta{font-size:.78rem;color:var(--ink-soft);margin-bottom:8px;}
+  .hh-content{font-size:.9rem;color:var(--ink-soft);white-space:pre-line;}
+  .hh-actions{display:flex;gap:6px;margin-top:10px;}
 
   /* modal thêm/sửa (dùng chung) */
   .app-modal{display:none;position:fixed;inset:0;background:rgba(28,21,18,.7);z-index:300;align-items:center;justify-content:center;padding:20px;}
@@ -346,7 +394,8 @@
         <li><a href="#gia-pha">Gia phả</a></li>
         <li><a href="#quy-che">Quy chế</a></li>
         <li><a href="#dong-gop">Thu - Chi</a></li>
-        <li><a href="#thanh-vien">Thành viên</a></li>
+        <li><a href="#danh-sach">Danh sách &amp; SĐT</a></li>
+        <li><a href="#hieu-hy">Hiếu hỉ</a></li>
         <li><a href="#lien-he">Liên hệ</a></li>
       </ul>
     </nav>
@@ -442,11 +491,13 @@
     </div>
 
     <div class="tree-note editor-only">
-      💡 <strong>Cách dùng:</strong> mỗi người có 4 nút: <strong>➕ Vợ/Chồng</strong>, <strong>➕ Con</strong>, <strong>✏️ Sửa tên</strong>, <strong>🗑️ Xóa</strong>. Bấm nút sẽ hiện ô nhập tên rõ ràng, gõ xong bấm Lưu.
+      💡 <strong>Cách dùng:</strong> mỗi người có các nút: <strong>➕ Vợ/Chồng</strong>, <strong>➕ Con</strong>, <strong>✏️ Sửa tên</strong>, <strong>🎓 Học hàm/Học vị</strong>, <strong>☎ SĐT</strong>, <strong>🗑️ Xóa</strong>. Bấm nút sẽ hiện ô nhập rõ ràng, gõ xong bấm Lưu.
     </div>
     <div class="tree-note" id="notEditorTreeNotice">
       🔒 Bạn đang ở chế độ <strong>chỉ xem</strong>. Đăng nhập Ban liên lạc (góc trên bên phải) để thêm/sửa/xóa người trong gia phả.
     </div>
+
+    <div class="gen-legend" id="genLegend"></div>
 
     <div class="tree">
       <div class="node tong">
@@ -626,21 +677,102 @@
 
 <div class="tile-divider"></div>
 
-<!-- ================= THÀNH VIÊN (mẫu) ================= -->
-<section id="thanh-vien">
+<!-- ================= DANH SÁCH DÒNG HỌ (kèm SĐT) ================= -->
+<section id="danh-sach">
   <div class="wrap">
     <div class="section-head">
       <div class="eyebrow">Danh bạ họ tộc</div>
-      <h2>Đại Diện Các Chi</h2>
-      <p>Danh sách mẫu — cập nhật theo ban liên lạc từng chi.</p>
+      <h2>Danh Sách Dòng Họ &amp; Số Điện Thoại</h2>
+      <p>Tự động tổng hợp từ cây gia phả của cả 5 chi — tìm nhanh theo tên, lọc theo chi.</p>
     </div>
-    <div class="tv-grid">
-      <div class="tv-card"><div class="avatar">A</div><h4>Mà Văn A</h4><div class="chi-tag">Trưởng Chi Trưởng</div></div>
-      <div class="tv-card"><div class="avatar">E</div><h4>Mà Văn E</h4><div class="chi-tag">Trưởng Chi Một</div></div>
-      <div class="tv-card"><div class="avatar">H</div><h4>Mà Văn H</h4><div class="chi-tag">Trưởng Chi Hai</div></div>
+    <div class="tree-note" style="margin-bottom:20px;">
+      ⚠️ <strong>Lưu ý:</strong> số điện thoại trong danh sách này hiển thị công khai cho bất kỳ ai xem trang. Chỉ Ban liên lạc (đã đăng nhập) mới thêm/sửa được số điện thoại, bấm nút <strong>☎ SĐT</strong> trên từng người ở phần "Gia phả" phía trên.
     </div>
+    <div class="ds-toolbar">
+      <input type="text" id="dsSearch" placeholder="🔎 Tìm theo tên..." oninput="renderDirectory()">
+      <select id="dsChiFilter" onchange="renderDirectory()">
+        <option value="">Tất cả các chi</option>
+        <option value="truong">Chi Trưởng</option>
+        <option value="mot">Chi Một</option>
+        <option value="hai">Chi Hai</option>
+        <option value="ba">Chi Ba</option>
+        <option value="bon">Chi Bốn</option>
+      </select>
+      <button class="btn btn-jade btn-sm" onclick="exportDirectoryExcel()">⬇ Xuất Excel</button>
+    </div>
+    <table class="ds-table">
+      <thead>
+        <tr><th>Họ và tên</th><th>Chi</th><th>Đời</th><th>Học hàm/Học vị</th><th>Số điện thoại</th></tr>
+      </thead>
+      <tbody id="dsTableBody"></tbody>
+    </table>
   </div>
 </section>
+
+<div class="tile-divider jade flip"></div>
+
+<!-- ================= THÔNG BÁO HIẾU HỈ ================= -->
+<section id="hieu-hy">
+  <div class="wrap" style="max-width:860px;">
+    <div class="section-head">
+      <div class="eyebrow">Việc hiếu — Việc hỉ</div>
+      <h2>Thông Báo Hiếu Hỉ</h2>
+      <p>Cưới hỏi, tang lễ, giỗ chạp trong dòng họ — thông báo kịp thời tới con cháu các chi.</p>
+    </div>
+
+    <div class="notify-bar">
+      <p id="notifStatusText">🔔 Bật thông báo để điện thoại/máy tính báo ngay khi có tin hiếu hỉ mới (khi bạn đang mở trang này).</p>
+      <button class="btn btn-gold btn-sm" id="notifBtn" onclick="enableNotify()">🔔 Bật thông báo</button>
+    </div>
+
+    <div class="tree-note editor-only">
+      💡 Bấm <strong>"➕ Đăng thông báo"</strong> để thêm tin hiếu/hỉ mới. Người đã bật thông báo và đang mở trang sẽ nhận ngay.
+    </div>
+    <div class="tree-note" id="notEditorHHNotice">
+      🔒 Bạn đang ở chế độ <strong>chỉ xem</strong>. Đăng nhập Ban liên lạc để đăng/sửa/xóa thông báo.
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;margin-bottom:16px;" class="editor-only">
+      <button class="btn btn-lacquer btn-sm" onclick="openAddTBModal()">➕ Đăng thông báo</button>
+    </div>
+
+    <div class="hh-grid" id="hhList"></div>
+  </div>
+</section>
+
+<!-- ================= MODAL THÊM/SỬA THÔNG BÁO HIẾU HỈ ================= -->
+<div id="tbModal" class="app-modal">
+  <div class="box" style="max-width:440px;">
+    <h3 id="tbTitle">Đăng thông báo</h3>
+    <div class="field" style="margin-bottom:10px;">
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Loại tin</label>
+      <select id="tbLoai" style="width:100%;padding:9px 11px;border:1px solid var(--paper-deep);border-radius:5px;font-family:inherit;font-size:.88rem;">
+        <option value="hieu">Việc hiếu (tang lễ)</option>
+        <option value="hi">Việc hỉ (cưới hỏi, mừng thọ...)</option>
+      </select>
+    </div>
+    <div class="field" style="margin-bottom:10px;">
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Tiêu đề</label>
+      <input type="text" id="tbTieuDe" placeholder="VD: Lễ cưới con trai ông Mà Văn A">
+    </div>
+    <div class="field" style="margin-bottom:10px;">
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Người liên quan</label>
+      <input type="text" id="tbNguoi" placeholder="VD: Mà Văn A (Chi Trưởng)">
+    </div>
+    <div class="field" style="margin-bottom:10px;">
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Ngày diễn ra</label>
+      <input type="date" id="tbNgay">
+    </div>
+    <div class="field" style="margin-bottom:6px;">
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Nội dung chi tiết</label>
+      <textarea id="tbNoiDung" rows="4" style="width:100%;padding:10px 12px;border:1px solid var(--paper-deep);border-radius:6px;font-family:inherit;font-size:.88rem;resize:vertical;" placeholder="Địa điểm, giờ giấc, ghi chú..."></textarea>
+    </div>
+    <div class="row">
+      <button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="submitTBModal()">Lưu &amp; Gửi thông báo</button>
+      <button class="btn btn-outline" style="flex:0;color:var(--ink-soft);border-color:var(--paper-deep);" onclick="closeTBModal()">Hủy</button>
+    </div>
+  </div>
+</div>
 
 <div class="tile-divider jade flip"></div>
 
@@ -657,7 +789,8 @@
         <li><a href="#gia-pha">Gia phả</a></li>
         <li><a href="#quy-che">Quy chế</a></li>
         <li><a href="#dong-gop">Thu - Chi</a></li>
-        <li><a href="#thanh-vien">Thành viên</a></li>
+        <li><a href="#danh-sach">Danh sách &amp; SĐT</a></li>
+        <li><a href="#hieu-hy">Hiếu hỉ</a></li>
       </ul>
     </div>
     <div>
@@ -827,8 +960,21 @@
   let idCounter = 1;
   function newId(){ return 'p' + (idCounter++) + '-' + Date.now().toString(36); }
 
-  function person(name, children, spouses, degree){ return { id: newId(), name, degree: degree || '', spouses: spouses || [], children: children || [] }; }
-  function spouse(name){ return { id: newId(), name }; }
+  function person(name, children, spouses, degree){ return { id: newId(), name, degree: degree || '', phone: '', spouses: spouses || [], children: children || [] }; }
+  function spouse(name){ return { id: newId(), name, phone: '' }; }
+
+  // màu phân biệt các đời — lặp lại theo chu kỳ 6 màu (xem CSS .gen-2 ... .gen-7)
+  function genClass(depth){
+    const idx = ((depth - 2) % 6 + 6) % 6; // đời 2 -> gen-2 ... đời 7 -> gen-7 -> lặp lại
+    return 'gen-' + (idx + 2);
+  }
+  function renderGenLegend(){
+    const el = document.getElementById('genLegend');
+    if(!el) return;
+    const colors = {2:'#8a1f13',3:'#b8863b',4:'#3f5d4e',5:'#2b5a7a',6:'#7a4a9c',7:'#a13a26'};
+    el.innerHTML = Object.keys(colors).map(g=>`<span class="lg-item"><span class="lg-dot" style="background:${colors[g]}"></span>Đời ${g}${g==7?'+ (lặp màu)':''}</span>`).join('');
+  }
+  renderGenLegend();
 
   const defaultTree = {
     truong: { title:'Chi Trưởng',
@@ -886,24 +1032,29 @@
     const spouseHtml = spouses.length ? `<div class="spouse-line">${spouses.map(s=>`
         <span class="spouse-tag">
           ⚭ <span class="sp-name" onclick="openRenameSpouseModal('${key}','${node.id}','${s.id}')" title="Bấm để sửa tên">${escapeHtml(s.name)}</span>
+          ${s.phone ? `<span class="ph-val" style="font-size:.74rem;">☎ ${escapeHtml(s.phone)}</span>` : ''}
+          <i class="editor-only" onclick="openEditSpousePhoneModal('${key}','${node.id}','${s.id}')" title="Sửa SĐT">☎</i>
           <i class="editor-only" onclick="removeSpouse('${key}','${node.id}','${s.id}')" title="Xóa vợ/chồng">×</i>
         </span>`).join('')}</div>` : '';
+    const phoneHtml = `<div class="phone-line">☎ ${node.phone ? `<span class="ph-val">${escapeHtml(node.phone)}</span>` : `<span class="ph-empty">Chưa có SĐT</span>`}</div>`;
     const childrenHtml = node.children.length
       ? `<div class="children-wrap">${node.children.map(c=>renderPerson(key, c, depth+1, false)).join('')}</div>`
       : (depth===2 ? '' : '');
     return `
-      <div class="person-card${isRoot?' is-head':''}">
+      <div class="person-card${isRoot?' is-head':''} ${genClass(depth)}">
         <div class="person-top">
           ${node.degree ? `<span class="degree-badge">${escapeHtml(node.degree)}</span>` : ''}
           <span class="pname">${escapeHtml(node.name)}</span>
           <span class="gen-tag">Đời ${depth}</span>
         </div>
+        ${phoneHtml}
         ${spouseHtml}
         <div class="action-row editor-only">
           <button class="act-gold" onclick="openAddSpouseModal('${key}','${node.id}')">➕ Vợ/Chồng</button>
           <button class="act-primary" onclick="openAddChildModal('${key}','${node.id}')">➕ Con</button>
           <button class="act-edit" onclick="openRenamePersonModal('${key}','${node.id}')">✏️ Sửa tên</button>
           <button class="act-edit" onclick="openEditDegreeModal('${key}','${node.id}')">🎓 Học hàm/Học vị</button>
+          <button class="act-edit" onclick="openEditPhoneModal('${key}','${node.id}')">☎ SĐT</button>
           ${depth>2 ? `<button class="act-danger" onclick="deletePerson('${key}','${node.id}')">🗑️ Xóa</button>` : ''}
         </div>
       </div>
@@ -915,6 +1066,7 @@
     document.getElementById('chiDetailTitle').textContent = d.title;
     document.getElementById('chiDetailSub').textContent = `Đứng đầu: ${d.root.name} · ${countPeople(d.root)} người`;
     document.getElementById('chiDetail').innerHTML = renderPerson(activeChiKey, d.root, 2, true);
+    renderDirectory();
   }
 
   function switchChiTab(key){
@@ -932,6 +1084,7 @@
   function renderAllChi(){
     renderTabs();
     renderDetail();
+    renderDirectory();
   }
 
   function findNode(node, id){
@@ -1058,6 +1211,31 @@
     }, true);
   }
 
+  function openEditPhoneModal(key, id){
+    if(!requireEditor()) return;
+    const node = findNode(treeData[key].root, id);
+    if(!node) return;
+    openPersonModal('Số điện thoại', `Nhập số điện thoại của "${node.name}". Để trống nếu chưa có.`, node.phone || '', async (phone)=>{
+      node.phone = phone;
+      await saveTree(key);
+      renderDetail();
+      showToast(phone ? 'Đã cập nhật số điện thoại.' : 'Đã xóa số điện thoại.');
+    }, true);
+  }
+
+  function openEditSpousePhoneModal(key, personId, spouseId){
+    if(!requireEditor()) return;
+    const node = findNode(treeData[key].root, personId);
+    const sp = node && (node.spouses||[]).find(s=>s.id===spouseId);
+    if(!sp) return;
+    openPersonModal('Số điện thoại', `Nhập số điện thoại của "${sp.name}". Để trống nếu chưa có.`, sp.phone || '', async (phone)=>{
+      sp.phone = phone;
+      await saveTree(key);
+      renderDetail();
+      showToast(phone ? 'Đã cập nhật số điện thoại.' : 'Đã xóa số điện thoại.');
+    }, true);
+  }
+
   function openRenameSpouseModal(key, personId, spouseId){
     if(!requireEditor()) return;
     const node = findNode(treeData[key].root, personId);
@@ -1101,6 +1279,63 @@
   }
 
   loadTree();
+
+  // ================= DANH SÁCH DÒNG HỌ (tổng hợp từ cây gia phả) =================
+  function flattenChi(chiTitle, chiKey, node, depth, list){
+    list.push({ name: node.name, chi: chiTitle, chiKey, depth, degree: node.degree || '', phone: node.phone || '' });
+    (node.spouses||[]).forEach(s=>{
+      list.push({ name: s.name, chi: chiTitle, chiKey, depth, degree: '', phone: s.phone || '', isSpouse:true });
+    });
+    node.children.forEach(c=>flattenChi(chiTitle, chiKey, c, depth+1, list));
+  }
+  function flattenAll(){
+    if(!treeData) return [];
+    let list = [];
+    CHI_ORDER.forEach(key=>{
+      flattenChi(treeData[key].title, key, treeData[key].root, 2, list);
+    });
+    return list;
+  }
+
+  function renderDirectory(){
+    const body = document.getElementById('dsTableBody');
+    if(!body || !treeData) return;
+    const q = (document.getElementById('dsSearch').value || '').trim().toLowerCase();
+    const chiFilter = document.getElementById('dsChiFilter').value;
+    let list = flattenAll();
+    if(chiFilter) list = list.filter(p=>p.chiKey===chiFilter);
+    if(q) list = list.filter(p=>p.name.toLowerCase().includes(q));
+    if(list.length===0){
+      body.innerHTML = `<tr class="empty-row"><td colspan="5">Không tìm thấy ai phù hợp.</td></tr>`;
+      return;
+    }
+    body.innerHTML = list.map(p=>`
+      <tr>
+        <td>${escapeHtml(p.name)}${p.isSpouse?' <span style="opacity:.6;font-size:.78rem;">(dâu/rể)</span>':''}</td>
+        <td>${escapeHtml(p.chi)}</td>
+        <td>Đời ${p.depth}</td>
+        <td>${escapeHtml(p.degree) || '—'}</td>
+        <td class="ph">${escapeHtml(p.phone) || '—'}</td>
+      </tr>`).join('');
+  }
+
+  function exportDirectoryExcel(){
+    const list = flattenAll();
+    if(list.length===0){ showToast('Chưa có dữ liệu để xuất.'); return; }
+    const rows = list.map(p=>({
+      'Họ và tên': p.name,
+      'Chi': p.chi,
+      'Đời': p.depth,
+      'Học hàm/Học vị': p.degree,
+      'Số điện thoại': p.phone
+    }));
+    const ws = XLSX.utils.json_to_sheet(rows);
+    ws['!cols'] = [{wch:24},{wch:14},{wch:8},{wch:18},{wch:16}];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Danh sach');
+    XLSX.writeFile(wb, 'danh-sach-dong-ho-ma.xlsx');
+    showToast('Đã xuất file Excel.');
+  }
 
   // ================= QUY CHẾ =================
   let quyCheList = [];
@@ -1410,6 +1645,160 @@
   }
 
   loadContributions();
+
+  // ================= THÔNG BÁO HIẾU HỈ =================
+  let hhList = [];
+  let tbHandler = null;
+  let tbEditId = null;
+
+  function loaiLabel(l){ return l==='hi' ? 'Việc hỉ' : 'Việc hiếu'; }
+
+  async function loadThongBao(){
+    try{
+      const { data, error } = await sb.from('thong_bao_hieu_hy').select('*').order('created_at', { ascending:false });
+      if(error) throw error;
+      hhList = data || [];
+    }catch(e){
+      hhList = [];
+      showToast('Không tải được thông báo hiếu hỉ (bảng dữ liệu có thể chưa được tạo trên Supabase).');
+    }
+    renderThongBao();
+  }
+
+  function renderThongBao(){
+    const el = document.getElementById('hhList');
+    if(!el) return;
+    if(hhList.length===0){
+      el.innerHTML = '<p style="text-align:center;color:var(--ink-soft);font-style:italic;">Chưa có thông báo nào.</p>';
+      return;
+    }
+    el.innerHTML = hhList.map(t=>`
+      <div class="hh-card ${t.loai==='hi'?'loai-hi':''}">
+        <div class="hh-top">
+          <span class="hh-badge">${loaiLabel(t.loai)}</span>
+          <span class="hh-meta">${t.ngay || ''}</span>
+        </div>
+        <h4>${escapeHtml(t.tieu_de)}</h4>
+        <div class="hh-meta">${escapeHtml(t.nguoi_lien_quan || '')}</div>
+        ${t.noi_dung ? `<div class="hh-content">${escapeHtml(t.noi_dung)}</div>` : ''}
+        <div class="hh-actions editor-only">
+          <button class="del-btn" style="color:var(--ink-soft);" onclick="openEditTBModal('${t.id}')">✏️ Sửa</button>
+          <button class="del-btn" onclick="deleteTB('${t.id}')">🗑️ Xóa</button>
+        </div>
+      </div>`).join('');
+  }
+
+  function openAddTBModal(){
+    if(!requireEditor()) return;
+    tbEditId = null;
+    document.getElementById('tbTitle').textContent = 'Đăng thông báo';
+    document.getElementById('tbLoai').value = 'hieu';
+    document.getElementById('tbTieuDe').value = '';
+    document.getElementById('tbNguoi').value = '';
+    document.getElementById('tbNgay').value = '';
+    document.getElementById('tbNoiDung').value = '';
+    document.getElementById('tbModal').style.display = 'flex';
+  }
+
+  function openEditTBModal(id){
+    if(!requireEditor()) return;
+    const t = hhList.find(x=>x.id===id);
+    if(!t) return;
+    tbEditId = id;
+    document.getElementById('tbTitle').textContent = 'Sửa thông báo';
+    document.getElementById('tbLoai').value = t.loai || 'hieu';
+    document.getElementById('tbTieuDe').value = t.tieu_de || '';
+    document.getElementById('tbNguoi').value = t.nguoi_lien_quan || '';
+    document.getElementById('tbNgay').value = t.ngay || '';
+    document.getElementById('tbNoiDung').value = t.noi_dung || '';
+    document.getElementById('tbModal').style.display = 'flex';
+  }
+
+  function closeTBModal(){
+    document.getElementById('tbModal').style.display = 'none';
+  }
+
+  async function submitTBModal(){
+    const loai = document.getElementById('tbLoai').value;
+    const tieu_de = document.getElementById('tbTieuDe').value.trim();
+    const nguoi_lien_quan = document.getElementById('tbNguoi').value.trim();
+    const ngay = document.getElementById('tbNgay').value;
+    const noi_dung = document.getElementById('tbNoiDung').value.trim();
+    if(!tieu_de){ showToast('Vui lòng nhập tiêu đề.'); return; }
+    try{
+      if(tbEditId){
+        const { error } = await sb.from('thong_bao_hieu_hy').update({ loai, tieu_de, nguoi_lien_quan, ngay: ngay || null, noi_dung }).eq('id', tbEditId);
+        if(error) throw error;
+        showToast('Đã cập nhật thông báo.');
+      }else{
+        const { error } = await sb.from('thong_bao_hieu_hy').insert({ loai, tieu_de, nguoi_lien_quan, ngay: ngay || null, noi_dung });
+        if(error) throw error;
+        showToast('Đã đăng thông báo.');
+      }
+      closeTBModal();
+      await loadThongBao();
+    }catch(e){
+      showToast('Lưu thông báo thất bại — kiểm tra lại bảng thong_bao_hieu_hy trên Supabase.');
+    }
+  }
+
+  async function deleteTB(id){
+    if(!requireEditor()) return;
+    const t = hhList.find(x=>x.id===id);
+    if(!window.confirm(`Xóa thông báo "${t ? t.tieu_de : ''}"?`)) return;
+    try{
+      const { error } = await sb.from('thong_bao_hieu_hy').delete().eq('id', id);
+      if(error) throw error;
+      await loadThongBao();
+      showToast('Đã xóa thông báo.');
+    }catch(e){
+      showToast('Xóa thất bại, vui lòng thử lại.');
+    }
+  }
+
+  // ---------- bật thông báo trên trình duyệt (khi trang đang mở) ----------
+  function refreshNotifBtn(){
+    const btn = document.getElementById('notifBtn');
+    const txt = document.getElementById('notifStatusText');
+    if(!btn || !('Notification' in window)) return;
+    if(Notification.permission === 'granted'){
+      btn.textContent = '🔔 Đã bật thông báo';
+      btn.disabled = true;
+      txt.textContent = '✅ Thông báo đang bật trên trình duyệt/thiết bị này — bạn sẽ nhận tin ngay khi có thông báo hiếu hỉ mới, miễn là trang này đang mở (kể cả chạy nền).';
+    }
+  }
+  async function enableNotify(){
+    if(!('Notification' in window)){
+      showToast('Trình duyệt này không hỗ trợ thông báo.');
+      return;
+    }
+    const perm = await Notification.requestPermission();
+    if(perm === 'granted'){
+      showToast('Đã bật thông báo trên thiết bị này.');
+      new Notification('Dòng Họ Mà', { body: 'Bạn sẽ nhận thông báo khi có tin hiếu hỉ mới.' });
+    }else{
+      showToast('Bạn chưa cho phép thông báo trong trình duyệt.');
+    }
+    refreshNotifBtn();
+  }
+  refreshNotifBtn();
+
+  // ---------- lắng nghe thông báo mới theo thời gian thực (Supabase Realtime) ----------
+  // Chỉ hoạt động khi trang đang mở trong trình duyệt (tab đang chạy).
+  try{
+    sb.channel('thong_bao_hieu_hy_realtime')
+      .on('postgres_changes', { event:'INSERT', schema:'public', table:'thong_bao_hieu_hy' }, (payload)=>{
+        const t = payload.new;
+        loadThongBao();
+        showToast(`📣 Thông báo mới: ${t.tieu_de}`);
+        if('Notification' in window && Notification.permission === 'granted'){
+          new Notification(`${loaiLabel(t.loai)}: ${t.tieu_de}`, { body: t.nguoi_lien_quan || 'Dòng Họ Mà — xem chi tiết trong trang.' });
+        }
+      })
+      .subscribe();
+  }catch(e){ /* realtime không khả dụng, bỏ qua */ }
+
+  loadThongBao();
 </script>
 </body>
 </html>
