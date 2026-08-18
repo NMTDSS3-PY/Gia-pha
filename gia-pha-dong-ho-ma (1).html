@@ -248,9 +248,11 @@
   .hh-grid{display:grid;gap:16px;}
   .hh-card{background:#fff8ea;border:1px solid var(--paper-deep);border-left:5px solid var(--lacquer);border-radius:8px;padding:18px 20px;box-shadow:var(--shadow);}
   .hh-card.loai-hi{border-left-color:var(--jade);}
+  .hh-card.loai-chung{border-left-color:var(--gold);}
   .hh-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between;}
   .hh-badge{font-size:.7rem;font-weight:700;padding:4px 10px;border-radius:10px;background:rgba(122,36,23,.12);color:var(--lacquer);}
   .hh-card.loai-hi .hh-badge{background:rgba(63,93,78,.15);color:var(--jade);}
+  .hh-card.loai-chung .hh-badge{background:rgba(184,134,59,.18);color:var(--gold);}
   .hh-card h4{font-size:1.02rem;margin:8px 0 4px;}
   .hh-meta{font-size:.78rem;color:var(--ink-soft);margin-bottom:8px;}
   .hh-content{font-size:.9rem;color:var(--ink-soft);white-space:pre-line;}
@@ -395,7 +397,7 @@
         <li><a href="#quy-che">Quy chế</a></li>
         <li><a href="#dong-gop">Thu - Chi</a></li>
         <li><a href="#danh-sach">Danh sách &amp; SĐT</a></li>
-        <li><a href="#hieu-hy">Hiếu hỉ</a></li>
+        <li><a href="#hieu-hy">Thông báo</a></li>
         <li><a href="#lien-he">Liên hệ</a></li>
       </ul>
     </nav>
@@ -711,22 +713,22 @@
 
 <div class="tile-divider jade flip"></div>
 
-<!-- ================= THÔNG BÁO HIẾU HỈ ================= -->
+<!-- ================= THÔNG BÁO ================= -->
 <section id="hieu-hy">
   <div class="wrap" style="max-width:860px;">
     <div class="section-head">
-      <div class="eyebrow">Việc hiếu — Việc hỉ</div>
-      <h2>Thông Báo Hiếu Hỉ</h2>
-      <p>Cưới hỏi, tang lễ, giỗ chạp trong dòng họ — thông báo kịp thời tới con cháu các chi.</p>
+      <div class="eyebrow">Bản tin dòng họ</div>
+      <h2>Thông Báo</h2>
+      <p>Cưới hỏi, tang lễ, giỗ chạp, họp họ hay bất kỳ tin gì cần báo tới con cháu các chi.</p>
     </div>
 
     <div class="notify-bar">
-      <p id="notifStatusText">🔔 Bật thông báo để điện thoại/máy tính báo ngay khi có tin hiếu hỉ mới (khi bạn đang mở trang này).</p>
+      <p id="notifStatusText">🔔 Bật thông báo để điện thoại/máy tính báo ngay khi có tin mới (khi bạn đang mở trang này).</p>
       <button class="btn btn-gold btn-sm" id="notifBtn" onclick="enableNotify()">🔔 Bật thông báo</button>
     </div>
 
     <div class="tree-note editor-only">
-      💡 Bấm <strong>"➕ Đăng thông báo"</strong> để thêm tin hiếu/hỉ mới. Người đã bật thông báo và đang mở trang sẽ nhận ngay.
+      💡 Bấm <strong>"➕ Đăng thông báo"</strong> để thêm tin mới, viết nội dung chi tiết trong ô "Nội dung". Người đã bật thông báo và đang mở trang sẽ nhận ngay.
     </div>
     <div class="tree-note" id="notEditorHHNotice">
       🔒 Bạn đang ở chế độ <strong>chỉ xem</strong>. Đăng nhập Ban liên lạc để đăng/sửa/xóa thông báo.
@@ -740,15 +742,16 @@
   </div>
 </section>
 
-<!-- ================= MODAL THÊM/SỬA THÔNG BÁO HIẾU HỈ ================= -->
+<!-- ================= MODAL THÊM/SỬA THÔNG BÁO ================= -->
 <div id="tbModal" class="app-modal">
-  <div class="box" style="max-width:440px;">
+  <div class="box" style="max-width:480px;">
     <h3 id="tbTitle">Đăng thông báo</h3>
     <div class="field" style="margin-bottom:10px;">
       <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Loại tin</label>
       <select id="tbLoai" style="width:100%;padding:9px 11px;border:1px solid var(--paper-deep);border-radius:5px;font-family:inherit;font-size:.88rem;">
         <option value="hieu">Việc hiếu (tang lễ)</option>
         <option value="hi">Việc hỉ (cưới hỏi, mừng thọ...)</option>
+        <option value="chung">Thông báo chung (họp họ, giỗ tổ...)</option>
       </select>
     </div>
     <div class="field" style="margin-bottom:10px;">
@@ -756,7 +759,7 @@
       <input type="text" id="tbTieuDe" placeholder="VD: Lễ cưới con trai ông Mà Văn A">
     </div>
     <div class="field" style="margin-bottom:10px;">
-      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Người liên quan</label>
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Người liên quan / Đơn vị (không bắt buộc)</label>
       <input type="text" id="tbNguoi" placeholder="VD: Mà Văn A (Chi Trưởng)">
     </div>
     <div class="field" style="margin-bottom:10px;">
@@ -764,8 +767,8 @@
       <input type="date" id="tbNgay">
     </div>
     <div class="field" style="margin-bottom:6px;">
-      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Nội dung chi tiết</label>
-      <textarea id="tbNoiDung" rows="4" style="width:100%;padding:10px 12px;border:1px solid var(--paper-deep);border-radius:6px;font-family:inherit;font-size:.88rem;resize:vertical;" placeholder="Địa điểm, giờ giấc, ghi chú..."></textarea>
+      <label style="display:block;font-size:.78rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px;">Nội dung thông báo</label>
+      <textarea id="tbNoiDung" rows="6" style="width:100%;padding:10px 12px;border:1px solid var(--paper-deep);border-radius:6px;font-family:inherit;font-size:.88rem;resize:vertical;" placeholder="Viết nội dung đầy đủ: địa điểm, giờ giấc, thành phần tham dự, ghi chú..."></textarea>
     </div>
     <div class="row">
       <button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="submitTBModal()">Lưu &amp; Gửi thông báo</button>
@@ -790,7 +793,7 @@
         <li><a href="#quy-che">Quy chế</a></li>
         <li><a href="#dong-gop">Thu - Chi</a></li>
         <li><a href="#danh-sach">Danh sách &amp; SĐT</a></li>
-        <li><a href="#hieu-hy">Hiếu hỉ</a></li>
+        <li><a href="#hieu-hy">Thông báo</a></li>
       </ul>
     </div>
     <div>
@@ -1651,7 +1654,11 @@
   let tbHandler = null;
   let tbEditId = null;
 
-  function loaiLabel(l){ return l==='hi' ? 'Việc hỉ' : 'Việc hiếu'; }
+  function loaiLabel(l){
+    if(l==='hi') return 'Việc hỉ';
+    if(l==='chung') return 'Thông báo chung';
+    return 'Việc hiếu';
+  }
 
   async function loadThongBao(){
     try{
@@ -1673,7 +1680,7 @@
       return;
     }
     el.innerHTML = hhList.map(t=>`
-      <div class="hh-card ${t.loai==='hi'?'loai-hi':''}">
+      <div class="hh-card ${t.loai==='hi'?'loai-hi':''} ${t.loai==='chung'?'loai-chung':''}">
         <div class="hh-top">
           <span class="hh-badge">${loaiLabel(t.loai)}</span>
           <span class="hh-meta">${t.ngay || ''}</span>
