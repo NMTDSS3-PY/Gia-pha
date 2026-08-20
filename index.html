@@ -6,6 +6,8 @@
 <title>Gia Phả Dòng Họ Mà</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#7a2417">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
@@ -182,7 +184,6 @@
   .person-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .person-top .pname{font-family:'Noto Serif',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
   .person-top .gen-tag{font-size:.66rem;background:var(--paper-deep);color:var(--ink-soft);padding:3px 9px;border-radius:10px;font-weight:700;white-space:nowrap;}
-  .degree-badge{font-size:.7rem;background:var(--jade);color:#fff;padding:3px 9px;border-radius:6px;font-weight:700;white-space:nowrap;}
   .spouse-line{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;}
   .spouse-tag{
     display:inline-flex;align-items:center;gap:6px;font-size:.78rem;
@@ -493,7 +494,7 @@
     </div>
 
     <div class="tree-note editor-only">
-      💡 <strong>Cách dùng:</strong> mỗi người có các nút: <strong>➕ Vợ/Chồng</strong>, <strong>➕ Con</strong>, <strong>✏️ Sửa tên</strong>, <strong>🎓 Học hàm/Học vị</strong>, <strong>☎ SĐT</strong>, <strong>🗑️ Xóa</strong>. Bấm nút sẽ hiện ô nhập rõ ràng, gõ xong bấm Lưu.
+      💡 <strong>Cách dùng:</strong> mỗi người có các nút: <strong>➕ Vợ/Chồng</strong>, <strong>➕ Con</strong>, <strong>✏️ Sửa tên</strong>, <strong>☎ SĐT</strong>, <strong>🗑️ Xóa</strong>. Bấm nút sẽ hiện ô nhập rõ ràng, gõ xong bấm Lưu.
     </div>
     <div class="tree-note" id="notEditorTreeNotice">
       🔒 Bạn đang ở chế độ <strong>chỉ xem</strong>. Đăng nhập Ban liên lạc (góc trên bên phải) để thêm/sửa/xóa người trong gia phả.
@@ -704,7 +705,7 @@
     </div>
     <table class="ds-table">
       <thead>
-        <tr><th>Họ và tên</th><th>Chi</th><th>Đời</th><th>Học hàm/Học vị</th><th>Số điện thoại</th></tr>
+        <tr><th>Họ và tên</th><th>Chi</th><th>Đời</th><th>Số điện thoại</th></tr>
       </thead>
       <tbody id="dsTableBody"></tbody>
     </table>
@@ -723,7 +724,7 @@
     </div>
 
     <div class="notify-bar">
-      <p id="notifStatusText">🔔 Bật thông báo để điện thoại/máy tính báo ngay khi có tin mới (khi bạn đang mở trang này).</p>
+      <p id="notifStatusText">🔔 Bật thông báo để nhận tin ngay trên điện thoại — kể cả khi bạn không mở trang này (giống thông báo ứng dụng thật).</p>
       <button class="btn btn-gold btn-sm" id="notifBtn" onclick="enableNotify()">🔔 Bật thông báo</button>
     </div>
 
@@ -963,7 +964,7 @@
   let idCounter = 1;
   function newId(){ return 'p' + (idCounter++) + '-' + Date.now().toString(36); }
 
-  function person(name, children, spouses, degree){ return { id: newId(), name, degree: degree || '', phone: '', spouses: spouses || [], children: children || [] }; }
+  function person(name, children, spouses){ return { id: newId(), name, phone: '', spouses: spouses || [], children: children || [] }; }
   function spouse(name){ return { id: newId(), name, phone: '' }; }
 
   // màu phân biệt các đời — lặp lại theo chu kỳ 6 màu (xem CSS .gen-2 ... .gen-7)
@@ -1046,7 +1047,6 @@
     return `
       <div class="person-card${isRoot?' is-head':''} ${genClass(depth)}">
         <div class="person-top">
-          ${node.degree ? `<span class="degree-badge">${escapeHtml(node.degree)}</span>` : ''}
           <span class="pname">${escapeHtml(node.name)}</span>
           <span class="gen-tag">Đời ${depth}</span>
         </div>
@@ -1056,7 +1056,6 @@
           <button class="act-gold" onclick="openAddSpouseModal('${key}','${node.id}')">➕ Vợ/Chồng</button>
           <button class="act-primary" onclick="openAddChildModal('${key}','${node.id}')">➕ Con</button>
           <button class="act-edit" onclick="openRenamePersonModal('${key}','${node.id}')">✏️ Sửa tên</button>
-          <button class="act-edit" onclick="openEditDegreeModal('${key}','${node.id}')">🎓 Học hàm/Học vị</button>
           <button class="act-edit" onclick="openEditPhoneModal('${key}','${node.id}')">☎ SĐT</button>
           ${depth>2 ? `<button class="act-danger" onclick="deletePerson('${key}','${node.id}')">🗑️ Xóa</button>` : ''}
         </div>
@@ -1202,18 +1201,6 @@
     });
   }
 
-  function openEditDegreeModal(key, id){
-    if(!requireEditor()) return;
-    const node = findNode(treeData[key].root, id);
-    if(!node) return;
-    openPersonModal('Học hàm / Học vị', `Ví dụ: GS.TS, ThS, KS, Cử nhân... Để trống nếu không có.`, node.degree || '', async (degree)=>{
-      node.degree = degree;
-      await saveTree(key);
-      renderDetail();
-      showToast(degree ? 'Đã cập nhật học hàm/học vị.' : 'Đã xóa học hàm/học vị.');
-    }, true);
-  }
-
   function openEditPhoneModal(key, id){
     if(!requireEditor()) return;
     const node = findNode(treeData[key].root, id);
@@ -1285,9 +1272,9 @@
 
   // ================= DANH SÁCH DÒNG HỌ (tổng hợp từ cây gia phả) =================
   function flattenChi(chiTitle, chiKey, node, depth, list){
-    list.push({ name: node.name, chi: chiTitle, chiKey, depth, degree: node.degree || '', phone: node.phone || '' });
+    list.push({ name: node.name, chi: chiTitle, chiKey, depth, phone: node.phone || '' });
     (node.spouses||[]).forEach(s=>{
-      list.push({ name: s.name, chi: chiTitle, chiKey, depth, degree: '', phone: s.phone || '', isSpouse:true });
+      list.push({ name: s.name, chi: chiTitle, chiKey, depth, phone: s.phone || '', isSpouse:true });
     });
     node.children.forEach(c=>flattenChi(chiTitle, chiKey, c, depth+1, list));
   }
@@ -1309,7 +1296,7 @@
     if(chiFilter) list = list.filter(p=>p.chiKey===chiFilter);
     if(q) list = list.filter(p=>p.name.toLowerCase().includes(q));
     if(list.length===0){
-      body.innerHTML = `<tr class="empty-row"><td colspan="5">Không tìm thấy ai phù hợp.</td></tr>`;
+      body.innerHTML = `<tr class="empty-row"><td colspan="4">Không tìm thấy ai phù hợp.</td></tr>`;
       return;
     }
     body.innerHTML = list.map(p=>`
@@ -1317,7 +1304,6 @@
         <td>${escapeHtml(p.name)}${p.isSpouse?' <span style="opacity:.6;font-size:.78rem;">(dâu/rể)</span>':''}</td>
         <td>${escapeHtml(p.chi)}</td>
         <td>Đời ${p.depth}</td>
-        <td>${escapeHtml(p.degree) || '—'}</td>
         <td class="ph">${escapeHtml(p.phone) || '—'}</td>
       </tr>`).join('');
   }
@@ -1329,11 +1315,10 @@
       'Họ và tên': p.name,
       'Chi': p.chi,
       'Đời': p.depth,
-      'Học hàm/Học vị': p.degree,
       'Số điện thoại': p.phone
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
-    ws['!cols'] = [{wch:24},{wch:14},{wch:8},{wch:18},{wch:16}];
+    ws['!cols'] = [{wch:24},{wch:14},{wch:8},{wch:16}];
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Danh sach');
     XLSX.writeFile(wb, 'danh-sach-dong-ho-ma.xlsx');
@@ -1763,44 +1748,91 @@
     }
   }
 
-  // ---------- bật thông báo trên trình duyệt (khi trang đang mở) ----------
-  function refreshNotifBtn(){
+  // ---------- thông báo đẩy thật (Web Push qua Service Worker) ----------
+  // Lưu ý quan trọng: trên iPhone, Safari CHỈ hỗ trợ thông báo khi trang đã được
+  // "Thêm vào Màn hình chính" và mở từ biểu tượng đó — mở bằng tab Safari thường
+  // sẽ luôn báo "trình duyệt không hỗ trợ", đây không phải lỗi của trang web.
+  const VAPID_PUBLIC_KEY = 'BAgm_pJcfVcfK0igLVDDiIA0bbzSG44WN9PkQWp_cRFVlJZnaJjtIPCYHHvPk0stECc4xCbUy20zcKwSCYQ09Hg';
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+
+  function urlBase64ToUint8Array(base64String){
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding).replace(/-/g,'+').replace(/_/g,'/');
+    const rawData = atob(base64);
+    return Uint8Array.from([...rawData].map(c=>c.charCodeAt(0)));
+  }
+
+  async function refreshNotifBtn(){
     const btn = document.getElementById('notifBtn');
     const txt = document.getElementById('notifStatusText');
-    if(!btn || !('Notification' in window)) return;
-    if(Notification.permission === 'granted'){
-      btn.textContent = '🔔 Đã bật thông báo';
-      btn.disabled = true;
-      txt.textContent = '✅ Thông báo đang bật trên trình duyệt/thiết bị này — bạn sẽ nhận tin ngay khi có thông báo hiếu hỉ mới, miễn là trang này đang mở (kể cả chạy nền).';
-    }
-  }
-  async function enableNotify(){
-    if(!('Notification' in window)){
-      showToast('Trình duyệt này không hỗ trợ thông báo.');
+    if(!btn) return;
+    if(isIOS && !isStandalone){
+      txt.textContent = '📱 Bạn đang dùng iPhone: hãy bấm nút Chia sẻ trong Safari → "Thêm vào MH chính" → mở lại trang từ biểu tượng vừa thêm, rồi bấm nút này để bật thông báo.';
       return;
     }
-    const perm = await Notification.requestPermission();
-    if(perm === 'granted'){
-      showToast('Đã bật thông báo trên thiết bị này.');
-      new Notification('Dòng Họ Mà', { body: 'Bạn sẽ nhận thông báo khi có tin hiếu hỉ mới.' });
-    }else{
-      showToast('Bạn chưa cho phép thông báo trong trình duyệt.');
+    if(!('serviceWorker' in navigator) || !('PushManager' in window)){
+      txt.textContent = '⚠️ Trình duyệt này không hỗ trợ thông báo đẩy. Hãy dùng Chrome (Android) hoặc Safari đã thêm ra Màn hình chính (iPhone).';
+      return;
     }
-    refreshNotifBtn();
+    try{
+      const reg = await navigator.serviceWorker.getRegistration();
+      const sub = reg ? await reg.pushManager.getSubscription() : null;
+      if(sub && Notification.permission === 'granted'){
+        btn.textContent = '🔔 Đã bật thông báo';
+        btn.disabled = true;
+        txt.textContent = '✅ Thông báo đang bật trên thiết bị này — bạn sẽ nhận tin ngay cả khi không mở trang, kể cả khi tắt trình duyệt.';
+      }
+    }catch(e){ /* chưa đăng ký, giữ nguyên trạng thái mặc định */ }
+  }
+
+  async function enableNotify(){
+    if(isIOS && !isStandalone){
+      showToast('Trên iPhone, hãy Thêm trang vào Màn hình chính trước (nút Chia sẻ trong Safari), rồi mở từ biểu tượng đó và bật thông báo.');
+      return;
+    }
+    if(!('serviceWorker' in navigator) || !('PushManager' in window)){
+      showToast('Thiết bị/trình duyệt này không hỗ trợ thông báo đẩy.');
+      return;
+    }
+    try{
+      const perm = await Notification.requestPermission();
+      if(perm !== 'granted'){
+        showToast('Bạn chưa cho phép thông báo trong trình duyệt.');
+        return;
+      }
+      const reg = await navigator.serviceWorker.register('/sw.js');
+      let sub = await reg.pushManager.getSubscription();
+      if(!sub){
+        sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+        });
+      }
+      const subJson = sub.toJSON();
+      const { error } = await sb.from('push_subscriptions').upsert({
+        endpoint: subJson.endpoint,
+        p256dh: subJson.keys.p256dh,
+        auth: subJson.keys.auth
+      }, { onConflict: 'endpoint' });
+      if(error) throw error;
+
+      showToast('Đã bật thông báo — bạn sẽ nhận tin kể cả khi không mở trang web.');
+      refreshNotifBtn();
+    }catch(e){
+      console.error(e);
+      showToast('Bật thông báo thất bại, vui lòng thử lại. Chi tiết: ' + (e.message||''));
+    }
   }
   refreshNotifBtn();
 
-  // ---------- lắng nghe thông báo mới theo thời gian thực (Supabase Realtime) ----------
-  // Chỉ hoạt động khi trang đang mở trong trình duyệt (tab đang chạy).
+  // ---------- lắng nghe thông báo mới theo thời gian thực khi trang đang mở (bổ sung, không thay cho push) ----------
   try{
     sb.channel('thong_bao_hieu_hy_realtime')
       .on('postgres_changes', { event:'INSERT', schema:'public', table:'thong_bao_hieu_hy' }, (payload)=>{
         const t = payload.new;
         loadThongBao();
         showToast(`📣 Thông báo mới: ${t.tieu_de}`);
-        if('Notification' in window && Notification.permission === 'granted'){
-          new Notification(`${loaiLabel(t.loai)}: ${t.tieu_de}`, { body: t.nguoi_lien_quan || 'Dòng Họ Mà — xem chi tiết trong trang.' });
-        }
       })
       .subscribe();
   }catch(e){ /* realtime không khả dụng, bỏ qua */ }
