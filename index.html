@@ -211,23 +211,27 @@
   .children-wrap .person-card{margin-top:10px;}
   .children-empty{font-size:.8rem;color:var(--ink-soft);opacity:.65;font-style:italic;padding:4px 0 2px 4px;}
 
-  /* ---------- màu phân biệt theo từng đời (thế hệ) ---------- */
-  .person-card{border-left:5px solid var(--paper-deep);}
-  .person-card.gen-2{border-left-color:#8a1f13;background:#fdf1ec;}
+  /* ---------- màu phân biệt theo từng đời (thế hệ) — 8 tông màu tách biệt rõ, hạn chế trùng ---------- */
+  .person-card{border-left:6px solid var(--paper-deep);}
+  .person-card.gen-2{border-left-color:#8a1f13;background:#fdf0ec;}
   .person-card.gen-2 .gen-tag{background:#8a1f13;color:#fff;}
-  .person-card.gen-3{border-left-color:#b8863b;background:#fdf6e6;}
-  .person-card.gen-3 .gen-tag{background:#b8863b;color:#fff;}
-  .person-card.gen-4{border-left-color:#3f5d4e;background:#f1f6f2;}
-  .person-card.gen-4 .gen-tag{background:#3f5d4e;color:#fff;}
-  .person-card.gen-5{border-left-color:#2b5a7a;background:#eef4f8;}
-  .person-card.gen-5 .gen-tag{background:#2b5a7a;color:#fff;}
-  .person-card.gen-6{border-left-color:#7a4a9c;background:#f4eef8;}
-  .person-card.gen-6 .gen-tag{background:#7a4a9c;color:#fff;}
-  .person-card.gen-7{border-left-color:#a13a26;background:#fdf0ec;}
-  .person-card.gen-7 .gen-tag{background:#a13a26;color:#fff;}
+  .person-card.gen-3{border-left-color:#c98a12;background:#fdf5e2;}
+  .person-card.gen-3 .gen-tag{background:#c98a12;color:#fff;}
+  .person-card.gen-4{border-left-color:#1f7a4d;background:#ecf7f0;}
+  .person-card.gen-4 .gen-tag{background:#1f7a4d;color:#fff;}
+  .person-card.gen-5{border-left-color:#1f6fa8;background:#eaf4fa;}
+  .person-card.gen-5 .gen-tag{background:#1f6fa8;color:#fff;}
+  .person-card.gen-6{border-left-color:#7440b0;background:#f3eefb;}
+  .person-card.gen-6 .gen-tag{background:#7440b0;color:#fff;}
+  .person-card.gen-7{border-left-color:#c23590;background:#fbecf5;}
+  .person-card.gen-7 .gen-tag{background:#c23590;color:#fff;}
+  .person-card.gen-8{border-left-color:#1a8f8f;background:#e9f7f7;}
+  .person-card.gen-8 .gen-tag{background:#1a8f8f;color:#fff;}
+  .person-card.gen-9{border-left-color:#8a5a1f;background:#f8f1e6;}
+  .person-card.gen-9 .gen-tag{background:#8a5a1f;color:#fff;}
   .gen-legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:0 0 20px;font-size:.78rem;color:var(--ink-soft);}
-  .gen-legend .lg-item{display:flex;align-items:center;gap:6px;}
-  .gen-legend .lg-dot{width:12px;height:12px;border-radius:3px;display:inline-block;}
+  .gen-legend .lg-item{display:flex;align-items:center;gap:6px;background:#fff8ea;border:1px solid var(--paper-deep);padding:5px 11px;border-radius:20px;}
+  .gen-legend .lg-dot{width:12px;height:12px;border-radius:50%;display:inline-block;}
 
   /* ---------- số điện thoại trên thẻ người ---------- */
   .phone-line{margin-top:6px;font-size:.82rem;color:var(--ink-soft);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
@@ -968,16 +972,16 @@
   function person(name, children, spouses, degree){ return { id: newId(), name, degree: degree || '', phone: '', spouses: spouses || [], children: children || [] }; }
   function spouse(name){ return { id: newId(), name, phone: '' }; }
 
-  // màu phân biệt các đời — lặp lại theo chu kỳ 6 màu (xem CSS .gen-2 ... .gen-7)
+  // màu phân biệt các đời — lặp lại theo chu kỳ 8 màu (xem CSS .gen-2 ... .gen-9)
   function genClass(depth){
-    const idx = ((depth - 2) % 6 + 6) % 6; // đời 2 -> gen-2 ... đời 7 -> gen-7 -> lặp lại
+    const idx = ((depth - 2) % 8 + 8) % 8; // đời 2 -> gen-2 ... đời 9 -> gen-9 -> lặp lại
     return 'gen-' + (idx + 2);
   }
   function renderGenLegend(){
     const el = document.getElementById('genLegend');
     if(!el) return;
-    const colors = {2:'#8a1f13',3:'#b8863b',4:'#3f5d4e',5:'#2b5a7a',6:'#7a4a9c',7:'#a13a26'};
-    el.innerHTML = Object.keys(colors).map(g=>`<span class="lg-item"><span class="lg-dot" style="background:${colors[g]}"></span>Đời ${g}${g==7?'+ (lặp màu)':''}</span>`).join('');
+    const colors = {2:'#8a1f13',3:'#c98a12',4:'#1f7a4d',5:'#1f6fa8',6:'#7440b0',7:'#c23590',8:'#1a8f8f',9:'#8a5a1f'};
+    el.innerHTML = Object.keys(colors).map(g=>`<span class="lg-item"><span class="lg-dot" style="background:${colors[g]}"></span>Đời ${g}${g==9?'+ (lặp màu)':''}</span>`).join('');
   }
   renderGenLegend();
 
