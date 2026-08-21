@@ -184,6 +184,7 @@
   .person-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .person-top .pname{font-family:'Noto Serif',serif;font-weight:700;font-size:1.02rem;color:var(--ink);}
   .person-top .gen-tag{font-size:.66rem;background:var(--paper-deep);color:var(--ink-soft);padding:3px 9px;border-radius:10px;font-weight:700;white-space:nowrap;}
+  .degree-badge{font-size:.7rem;background:var(--jade);color:#fff;padding:3px 9px;border-radius:6px;font-weight:700;white-space:nowrap;}
   .spouse-line{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px;}
   .spouse-tag{
     display:inline-flex;align-items:center;gap:6px;font-size:.78rem;
@@ -494,7 +495,7 @@
     </div>
 
     <div class="tree-note editor-only">
-      💡 <strong>Cách dùng:</strong> mỗi người có các nút: <strong>➕ Vợ/Chồng</strong>, <strong>➕ Con</strong>, <strong>✏️ Sửa tên</strong>, <strong>☎ SĐT</strong>, <strong>🗑️ Xóa</strong>. Bấm nút sẽ hiện ô nhập rõ ràng, gõ xong bấm Lưu.
+      💡 <strong>Cách dùng:</strong> mỗi người có các nút: <strong>➕ Vợ/Chồng</strong>, <strong>➕ Con</strong>, <strong>✏️ Sửa tên</strong>, <strong>🎓 Học hàm/Học vị</strong>, <strong>☎ SĐT</strong>, <strong>🗑️ Xóa</strong>. Bấm nút sẽ hiện ô nhập rõ ràng, gõ xong bấm Lưu.
     </div>
     <div class="tree-note" id="notEditorTreeNotice">
       🔒 Bạn đang ở chế độ <strong>chỉ xem</strong>. Đăng nhập Ban liên lạc (góc trên bên phải) để thêm/sửa/xóa người trong gia phả.
@@ -705,7 +706,7 @@
     </div>
     <table class="ds-table">
       <thead>
-        <tr><th>Họ và tên</th><th>Chi</th><th>Đời</th><th>Số điện thoại</th></tr>
+        <tr><th>Họ và tên</th><th>Chi</th><th>Đời</th><th>Học hàm/Học vị</th><th>Số điện thoại</th></tr>
       </thead>
       <tbody id="dsTableBody"></tbody>
     </table>
@@ -964,7 +965,7 @@
   let idCounter = 1;
   function newId(){ return 'p' + (idCounter++) + '-' + Date.now().toString(36); }
 
-  function person(name, children, spouses){ return { id: newId(), name, phone: '', spouses: spouses || [], children: children || [] }; }
+  function person(name, children, spouses, degree){ return { id: newId(), name, degree: degree || '', phone: '', spouses: spouses || [], children: children || [] }; }
   function spouse(name){ return { id: newId(), name, phone: '' }; }
 
   // màu phân biệt các đời — lặp lại theo chu kỳ 6 màu (xem CSS .gen-2 ... .gen-7)
@@ -1047,6 +1048,7 @@
     return `
       <div class="person-card${isRoot?' is-head':''} ${genClass(depth)}">
         <div class="person-top">
+          ${node.degree ? `<span class="degree-badge">${escapeHtml(node.degree)}</span>` : ''}
           <span class="pname">${escapeHtml(node.name)}</span>
           <span class="gen-tag">Đời ${depth}</span>
         </div>
@@ -1056,6 +1058,7 @@
           <button class="act-gold" onclick="openAddSpouseModal('${key}','${node.id}')">➕ Vợ/Chồng</button>
           <button class="act-primary" onclick="openAddChildModal('${key}','${node.id}')">➕ Con</button>
           <button class="act-edit" onclick="openRenamePersonModal('${key}','${node.id}')">✏️ Sửa tên</button>
+          <button class="act-edit" onclick="openEditDegreeModal('${key}','${node.id}')">🎓 Học hàm/Học vị</button>
           <button class="act-edit" onclick="openEditPhoneModal('${key}','${node.id}')">☎ SĐT</button>
           ${depth>2 ? `<button class="act-danger" onclick="deletePerson('${key}','${node.id}')">🗑️ Xóa</button>` : ''}
         </div>
@@ -1201,6 +1204,18 @@
     });
   }
 
+  function openEditDegreeModal(key, id){
+    if(!requireEditor()) return;
+    const node = findNode(treeData[key].root, id);
+    if(!node) return;
+    openPersonModal('Học hàm / Học vị', `Ví dụ: GS.TS, ThS, KS, Cử nhân... Để trống nếu không có.`, node.degree || '', async (degree)=>{
+      node.degree = degree;
+      await saveTree(key);
+      renderDetail();
+      showToast(degree ? 'Đã cập nhật học hàm/học vị.' : 'Đã xóa học hàm/học vị.');
+    }, true);
+  }
+
   function openEditPhoneModal(key, id){
     if(!requireEditor()) return;
     const node = findNode(treeData[key].root, id);
@@ -1272,9 +1287,9 @@
 
   // ================= DANH SÁCH DÒNG HỌ (tổng hợp từ cây gia phả) =================
   function flattenChi(chiTitle, chiKey, node, depth, list){
-    list.push({ name: node.name, chi: chiTitle, chiKey, depth, phone: node.phone || '' });
+    list.push({ name: node.name, chi: chiTitle, chiKey, depth, degree: node.degree || '', phone: node.phone || '' });
     (node.spouses||[]).forEach(s=>{
-      list.push({ name: s.name, chi: chiTitle, chiKey, depth, phone: s.phone || '', isSpouse:true });
+      list.push({ name: s.name, chi: chiTitle, chiKey, depth, degree: '', phone: s.phone || '', isSpouse:true });
     });
     node.children.forEach(c=>flattenChi(chiTitle, chiKey, c, depth+1, list));
   }
@@ -1296,7 +1311,7 @@
     if(chiFilter) list = list.filter(p=>p.chiKey===chiFilter);
     if(q) list = list.filter(p=>p.name.toLowerCase().includes(q));
     if(list.length===0){
-      body.innerHTML = `<tr class="empty-row"><td colspan="4">Không tìm thấy ai phù hợp.</td></tr>`;
+      body.innerHTML = `<tr class="empty-row"><td colspan="5">Không tìm thấy ai phù hợp.</td></tr>`;
       return;
     }
     body.innerHTML = list.map(p=>`
@@ -1304,6 +1319,7 @@
         <td>${escapeHtml(p.name)}${p.isSpouse?' <span style="opacity:.6;font-size:.78rem;">(dâu/rể)</span>':''}</td>
         <td>${escapeHtml(p.chi)}</td>
         <td>Đời ${p.depth}</td>
+        <td>${escapeHtml(p.degree) || '—'}</td>
         <td class="ph">${escapeHtml(p.phone) || '—'}</td>
       </tr>`).join('');
   }
@@ -1315,10 +1331,11 @@
       'Họ và tên': p.name,
       'Chi': p.chi,
       'Đời': p.depth,
+      'Học hàm/Học vị': p.degree,
       'Số điện thoại': p.phone
     }));
     const ws = XLSX.utils.json_to_sheet(rows);
-    ws['!cols'] = [{wch:24},{wch:14},{wch:8},{wch:16}];
+    ws['!cols'] = [{wch:24},{wch:14},{wch:8},{wch:18},{wch:16}];
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Danh sach');
     XLSX.writeFile(wb, 'danh-sach-dong-ho-ma.xlsx');
