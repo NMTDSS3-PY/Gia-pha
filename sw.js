@@ -18,18 +18,39 @@ self.addEventListener('push', function (event) {
     badge: '/icons/icon-192.png',
     data: { url: data.url || '/#hieu-hy' },
   };
-  event.waitUntil(self.registration.showNotification(title, options));
+  event.waitUntil(
+    Promise.all([
+      self.registration.showNotification(title, options),
+      // cập nhật huy hiệu số trên icon app (iPhone đã cài ra Màn hình chính, máy tính đã cài app)
+      // đếm theo số thông báo đẩy đang hiện (chưa được người dùng mở xem)
+      self.registration.getNotifications().then((list) => {
+        try {
+          if ('setAppBadge' in self.navigator) self.navigator.setAppBadge(list.length + 1);
+        } catch (e) { /* thiết bị không hỗ trợ, bỏ qua */ }
+      }),
+    ])
+  );
 });
 
 self.addEventListener('notificationclick', function (event) {
   event.notification.close();
   const url = (event.notification.data && event.notification.data.url) || '/#hieu-hy';
   event.waitUntil(
-    clients.matchAll({ type: 'window' }).then((list) => {
-      for (const client of list) {
-        if ('focus' in client) return client.focus();
-      }
-      if (clients.openWindow) return clients.openWindow(url);
-    })
+    Promise.all([
+      clients.matchAll({ type: 'window' }).then((list) => {
+        for (const client of list) {
+          if ('focus' in client) return client.focus();
+        }
+        if (clients.openWindow) return clients.openWindow(url);
+      }),
+      // còn thông báo nào chưa mở thì giữ số, hết thì xóa huy hiệu
+      self.registration.getNotifications().then((list) => {
+        try {
+          if ('setAppBadge' in self.navigator) {
+            if (list.length > 0) self.navigator.setAppBadge(list.length); else self.navigator.clearAppBadge();
+          }
+        } catch (e) { /* bỏ qua */ }
+      }),
+    ])
   );
 });

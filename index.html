@@ -78,6 +78,12 @@
     transition:.2s;
   }
   nav a:hover{background:rgba(217,176,106,.15);color:var(--gold-light);}
+  nav a{position:relative;}
+  .nav-unread-dot{
+    position:absolute;top:2px;right:2px;min-width:16px;height:16px;padding:0 4px;
+    background:var(--lacquer);color:#fff;border-radius:9px;font-size:.62rem;font-weight:800;
+    display:flex;align-items:center;justify-content:center;line-height:1;
+  }
   .burger{display:none;background:none;border:none;color:var(--paper);font-size:1.6rem;cursor:pointer;}
   #authBox{flex-shrink:0;}
   /* Ẩn toàn bộ nút/khu vực chỉnh sửa cho tới khi Ban liên lạc đăng nhập */
@@ -403,7 +409,7 @@
         <li><a href="#quy-che">Quy chế</a></li>
         <li><a href="#dong-gop">Thu - Chi</a></li>
         <li><a href="#danh-sach">Danh sách &amp; SĐT</a></li>
-        <li><a href="#hieu-hy">Thông báo</a></li>
+        <li><a href="#hieu-hy" id="navHieuHy">Thông báo</a></li>
         <li><a href="#lien-he">Liên hệ</a></li>
       </ul>
     </nav>
@@ -1676,7 +1682,59 @@
       showToast('Không tải được thông báo hiếu hỉ (bảng dữ liệu có thể chưa được tạo trên Supabase).');
     }
     renderThongBao();
+    updateUnreadBadge();
   }
+
+  // ---------- huy hiệu "chưa đọc" (badge số) — trên tab menu + trên icon app ngoài màn hình ----------
+  const LAST_SEEN_KEY = 'dongho_ma_hh_last_seen';
+
+  function getLastSeenTime(){
+    return parseInt(localStorage.getItem(LAST_SEEN_KEY) || '0', 10);
+  }
+
+  function countUnread(){
+    const lastSeen = getLastSeenTime();
+    return hhList.filter(t => new Date(t.created_at).getTime() > lastSeen).length;
+  }
+
+  function updateUnreadBadge(){
+    const unread = countUnread();
+    // 1) chấm đỏ ngay trên tab "Thông báo" trong menu — thấy trên mọi thiết bị, mọi trình duyệt
+    document.querySelectorAll('#navHieuHy').forEach(a=>{
+      let dot = a.querySelector('.nav-unread-dot');
+      if(unread > 0){
+        if(!dot){ dot = document.createElement('span'); dot.className = 'nav-unread-dot'; a.appendChild(dot); }
+        dot.textContent = unread > 9 ? '9+' : unread;
+      }else if(dot){ dot.remove(); }
+    });
+    // 2) huy hiệu số trên icon app ngoài màn hình chính (Badging API)
+    //    - iPhone: hoạt động khi đã "Thêm vào Màn hình chính" (từ iOS 16.4)
+    //    - Android Chrome: hệ điều hành tự hiện chấm đỏ khi có thông báo, không cần code thêm
+    //    - Máy tính (Chrome/Edge): hoạt động khi đã "Cài đặt ứng dụng"
+    try{
+      if('setAppBadge' in navigator){
+        if(unread > 0) navigator.setAppBadge(unread); else navigator.clearAppBadge();
+      }
+    }catch(e){ /* thiết bị không hỗ trợ, bỏ qua */ }
+  }
+
+  function markThongBaoAsSeen(){
+    localStorage.setItem(LAST_SEEN_KEY, Date.now().toString());
+    updateUnreadBadge();
+    // đóng luôn các thông báo đẩy đang hiện trên điện thoại vì người dùng đã vào xem trong app
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.getRegistration().then(reg=>{
+        if(reg) reg.getNotifications().then(list=> list.forEach(n=>n.close()));
+      });
+    }
+  }
+
+  // khi người dùng bấm vào tab "Thông báo" (menu trên/dưới, hoặc link chân trang) -> coi như đã đọc
+  document.querySelectorAll('a[href="#hieu-hy"]').forEach(a=>{
+    a.addEventListener('click', ()=> setTimeout(markThongBaoAsSeen, 300));
+  });
+  // nếu người dùng mở thẳng link .../#hieu-hy (vd từ thông báo đẩy) -> cũng tính là đã đọc
+  if(location.hash === '#hieu-hy') setTimeout(markThongBaoAsSeen, 500);
 
   function renderThongBao(){
     const el = document.getElementById('hhList');
