@@ -918,9 +918,27 @@
   }
 
   // ---------- âm thanh "coong" nhẹ khi có thông báo mới hiện trên màn hình (lúc đang mở trang) ----------
+  // Lưu ý: mọi trình duyệt đều chặn phát âm thanh tự động cho tới khi người dùng chạm/bấm
+  // vào trang ít nhất 1 lần (chống spam âm thanh quảng cáo) — nên cần "mở khóa" âm thanh
+  // ngay từ lần chạm/bấm đầu tiên, để khi có tin mới đến sau đó mới phát được.
+  let sharedAudioCtx = null;
+  function unlockAudioOnce(){
+    if(sharedAudioCtx) return;
+    try{
+      sharedAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if(sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume();
+    }catch(e){ /* trình duyệt không hỗ trợ, bỏ qua */ }
+  }
+  ['click','touchstart','keydown'].forEach(ev=>{
+    document.addEventListener(ev, unlockAudioOnce, { once:true, passive:true });
+  });
+
   function playNotifyChime(){
     try{
-      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      if(!sharedAudioCtx) unlockAudioOnce();
+      const ctx = sharedAudioCtx;
+      if(!ctx) return;
+      if(ctx.state === 'suspended') ctx.resume();
       const now = ctx.currentTime;
       [ {f:880, t:0, d:0.14}, {f:1175, t:0.12, d:0.22} ].forEach(note=>{
         const osc = ctx.createOscillator();
