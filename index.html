@@ -363,6 +363,19 @@
   }
   .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+  .notify-prompt{
+    position:fixed;left:16px;right:16px;bottom:16px;max-width:420px;margin:0 auto;
+    background:#fff8ea;border:1px solid var(--gold);border-radius:10px;
+    padding:16px 18px;box-shadow:var(--shadow);z-index:210;
+    transform:translateY(140%);transition:.35s ease;
+  }
+  .notify-prompt.show{transform:translateY(0);}
+  .notify-prompt p{margin:0 0 12px;font-size:.86rem;color:var(--ink);line-height:1.5;}
+  .notify-prompt .np-row{display:flex;gap:10px;justify-content:flex-end;}
+  .notify-prompt button{border:none;border-radius:6px;padding:8px 14px;font-size:.82rem;font-weight:600;cursor:pointer;}
+  .notify-prompt .np-later{background:transparent;color:var(--ink-soft);}
+  .notify-prompt .np-enable{background:var(--gold);color:#fff;}
+
   @media (min-width:640px){
     .dg-summary{grid-template-columns:repeat(3,1fr);}
   }
@@ -821,6 +834,13 @@
 </footer>
 
 <div class="toast" id="toast"></div>
+<div class="notify-prompt" id="notifyPrompt">
+  <p>🔔 Bạn muốn nhận thông báo hiếu hỉ ngay trên điện thoại, kể cả khi không mở trang này không?</p>
+  <div class="np-row">
+    <button class="np-later" onclick="dismissNotifyPrompt()">Để sau</button>
+    <button class="np-enable" onclick="dismissNotifyPrompt(); enableNotify();">🔔 Bật ngay</button>
+  </div>
+</div>
 
 <script>
   // ---------- kết nối Supabase (database thật, dữ liệu không mất khi tải lại) ----------
@@ -895,6 +915,26 @@
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(()=>t.classList.remove('show'), 2200);
+  }
+
+  // ---------- âm thanh "coong" nhẹ khi có thông báo mới hiện trên màn hình (lúc đang mở trang) ----------
+  function playNotifyChime(){
+    try{
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const now = ctx.currentTime;
+      [ {f:880, t:0, d:0.14}, {f:1175, t:0.12, d:0.22} ].forEach(note=>{
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.f, now + note.t);
+        gain.gain.setValueAtTime(0, now + note.t);
+        gain.gain.linearRampToValueAtTime(0.22, now + note.t + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + note.t + note.d);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + note.t);
+        osc.stop(now + note.t + note.d + 0.05);
+      });
+    }catch(e){ /* trình duyệt chặn âm thanh tự động, bỏ qua */ }
   }
 
   function escapeHtml(str){
@@ -1727,6 +1767,25 @@
         if(reg) reg.getNotifications().then(list=> list.forEach(n=>n.close()));
       });
     }
+    // sau khi người dùng đã xem xong 1 thông báo, gợi ý bật thông báo (nếu chưa bật) — không tự xin quyền ngay
+    setTimeout(maybeShowNotifyPrompt, 1200);
+  }
+
+  // ---------- gợi ý bật thông báo, đúng lúc người dùng vừa quan tâm xem tin (không làm phiền ngay khi vào trang) ----------
+  const NOTIFY_PROMPT_SNOOZE_KEY = 'dongho_ma_notify_prompt_snooze_until';
+
+  function maybeShowNotifyPrompt(){
+    if(!('Notification' in window)) return;
+    if(Notification.permission !== 'default') return; // đã bật rồi hoặc đã từ chối trước đó -> không hỏi lại
+    const snoozeUntil = parseInt(localStorage.getItem(NOTIFY_PROMPT_SNOOZE_KEY) || '0', 10);
+    if(Date.now() < snoozeUntil) return; // vừa bấm "Để sau" gần đây -> chưa hỏi lại
+    document.getElementById('notifyPrompt').classList.add('show');
+  }
+
+  function dismissNotifyPrompt(){
+    document.getElementById('notifyPrompt').classList.remove('show');
+    // "Để sau" -> 3 ngày sau mới gợi ý lại, tránh làm phiền
+    localStorage.setItem(NOTIFY_PROMPT_SNOOZE_KEY, (Date.now() + 3*24*60*60*1000).toString());
   }
 
   // khi người dùng bấm vào tab "Thông báo" (menu trên/dưới, hoặc link chân trang) -> coi như đã đọc
@@ -1912,6 +1971,8 @@
         const t = payload.new;
         loadThongBao();
         showToast(`📣 Thông báo mới: ${t.tieu_de}`);
+        playNotifyChime();
+        setTimeout(maybeShowNotifyPrompt, 1500);
       })
       .subscribe();
   }catch(e){ /* realtime không khả dụng, bỏ qua */ }
